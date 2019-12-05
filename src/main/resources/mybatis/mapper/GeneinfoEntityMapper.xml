@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.demos.mybatis.spider.mapper.GeneinfoEntityMapper">
+  <resultMap id="BaseResultMap" type="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="pre_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="pre_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="abstract_zh" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="doi" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="bookcode" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="publish_company" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="publish_year" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="publish_month" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="key_words" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="pre_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="pre_title" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="abstract_zh" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="doi" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="bookcode" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="publish_company" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="publish_year" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="publish_month" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="key_words" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="abstract_en" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, pre_num, pre_title, abstract_zh, doi, bookcode, publish_company, publish_year, 
+    publish_month, key_words
+  </sql>
+  <sql id="Blob_Column_List">
+    abstract_en
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_gene_info_new
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_gene_info_new
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_gene_info_new (pre_num, pre_title, abstract_zh, 
+      doi, bookcode, publish_company, 
+      publish_year, publish_month, key_words, 
+      abstract_en)
+    values (#{preNum,jdbcType=INTEGER}, #{preTitle,jdbcType=VARCHAR}, #{abstractZh,jdbcType=INTEGER}, 
+      #{doi,jdbcType=VARCHAR}, #{bookcode,jdbcType=VARCHAR}, #{publishCompany,jdbcType=VARCHAR}, 
+      #{publishYear,jdbcType=INTEGER}, #{publishMonth,jdbcType=INTEGER}, #{keyWords,jdbcType=VARCHAR}, 
+      #{abstractEn,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_gene_info_new
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="preNum != null">
+        pre_num,
+      </if>
+      <if test="preTitle != null">
+        pre_title,
+      </if>
+      <if test="abstractZh != null">
+        abstract_zh,
+      </if>
+      <if test="doi != null">
+        doi,
+      </if>
+      <if test="bookcode != null">
+        bookcode,
+      </if>
+      <if test="publishCompany != null">
+        publish_company,
+      </if>
+      <if test="publishYear != null">
+        publish_year,
+      </if>
+      <if test="publishMonth != null">
+        publish_month,
+      </if>
+      <if test="keyWords != null">
+        key_words,
+      </if>
+      <if test="abstractEn != null">
+        abstract_en,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="preNum != null">
+        #{preNum,jdbcType=INTEGER},
+      </if>
+      <if test="preTitle != null">
+        #{preTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="abstractZh != null">
+        #{abstractZh,jdbcType=INTEGER},
+      </if>
+      <if test="doi != null">
+        #{doi,jdbcType=VARCHAR},
+      </if>
+      <if test="bookcode != null">
+        #{bookcode,jdbcType=VARCHAR},
+      </if>
+      <if test="publishCompany != null">
+        #{publishCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="publishYear != null">
+        #{publishYear,jdbcType=INTEGER},
+      </if>
+      <if test="publishMonth != null">
+        #{publishMonth,jdbcType=INTEGER},
+      </if>
+      <if test="keyWords != null">
+        #{keyWords,jdbcType=VARCHAR},
+      </if>
+      <if test="abstractEn != null">
+        #{abstractEn,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
+    update t_gene_info_new
+    <set>
+      <if test="preNum != null">
+        pre_num = #{preNum,jdbcType=INTEGER},
+      </if>
+      <if test="preTitle != null">
+        pre_title = #{preTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="abstractZh != null">
+        abstract_zh = #{abstractZh,jdbcType=INTEGER},
+      </if>
+      <if test="doi != null">
+        doi = #{doi,jdbcType=VARCHAR},
+      </if>
+      <if test="bookcode != null">
+        bookcode = #{bookcode,jdbcType=VARCHAR},
+      </if>
+      <if test="publishCompany != null">
+        publish_company = #{publishCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="publishYear != null">
+        publish_year = #{publishYear,jdbcType=INTEGER},
+      </if>
+      <if test="publishMonth != null">
+        publish_month = #{publishMonth,jdbcType=INTEGER},
+      </if>
+      <if test="keyWords != null">
+        key_words = #{keyWords,jdbcType=VARCHAR},
+      </if>
+      <if test="abstractEn != null">
+        abstract_en = #{abstractEn,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
+    update t_gene_info_new
+    set pre_num = #{preNum,jdbcType=INTEGER},
+      pre_title = #{preTitle,jdbcType=VARCHAR},
+      abstract_zh = #{abstractZh,jdbcType=INTEGER},
+      doi = #{doi,jdbcType=VARCHAR},
+      bookcode = #{bookcode,jdbcType=VARCHAR},
+      publish_company = #{publishCompany,jdbcType=VARCHAR},
+      publish_year = #{publishYear,jdbcType=INTEGER},
+      publish_month = #{publishMonth,jdbcType=INTEGER},
+      key_words = #{keyWords,jdbcType=VARCHAR},
+      abstract_en = #{abstractEn,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
+    update t_gene_info_new
+    set pre_num = #{preNum,jdbcType=INTEGER},
+      pre_title = #{preTitle,jdbcType=VARCHAR},
+      abstract_zh = #{abstractZh,jdbcType=INTEGER},
+      doi = #{doi,jdbcType=VARCHAR},
+      bookcode = #{bookcode,jdbcType=VARCHAR},
+      publish_company = #{publishCompany,jdbcType=VARCHAR},
+      publish_year = #{publishYear,jdbcType=INTEGER},
+      publish_month = #{publishMonth,jdbcType=INTEGER},
+      key_words = #{keyWords,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectMult" parameterType="java.util.List" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_gene_info_new where 
+    <choose>
+      <when test="list!=null and list.size()>0">
+        id in 
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+          #{item}
+        </foreach>
+      </when>
+      <otherwise>
+        1=0
+      </otherwise>
+    </choose>
+  </select>
+</mapper>

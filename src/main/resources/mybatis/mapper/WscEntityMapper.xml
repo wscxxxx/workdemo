@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.demos.mybatis.spider.mapper.WscEntityMapper">
+  <resultMap id="BaseResultMap" type="com.work.demos.mybatis.spider.entity.WscEntity">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="names" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="http_ip" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="https_ip" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="last_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, names, http_ip, https_ip, last_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_wsc
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_wsc
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.work.demos.mybatis.spider.entity.WscEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_wsc (names, http_ip, https_ip, 
+      last_time, update_time)
+    values (#{names,jdbcType=VARCHAR}, #{httpIp,jdbcType=VARCHAR}, #{httpsIp,jdbcType=VARCHAR}, 
+      #{lastTime,jdbcType=TIMESTAMP}, current_timestamp(6))
+  </insert>
+  <insert id="insertSelective" parameterType="com.work.demos.mybatis.spider.entity.WscEntity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_wsc
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="names != null">
+        names,
+      </if>
+      <if test="httpIp != null">
+        http_ip,
+      </if>
+      <if test="httpsIp != null">
+        https_ip,
+      </if>
+      <if test="lastTime != null">
+        last_time,
+      </if>
+      update_time,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="names != null">
+        #{names,jdbcType=VARCHAR},
+      </if>
+      <if test="httpIp != null">
+        #{httpIp,jdbcType=VARCHAR},
+      </if>
+      <if test="httpsIp != null">
+        #{httpsIp,jdbcType=VARCHAR},
+      </if>
+      <if test="lastTime != null">
+        #{lastTime,jdbcType=TIMESTAMP},
+      </if>
+      current_timestamp(6),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.work.demos.mybatis.spider.entity.WscEntity">
+    update t_wsc
+    <set>
+      <if test="names != null">
+        names = #{names,jdbcType=VARCHAR},
+      </if>
+      <if test="httpIp != null">
+        http_ip = #{httpIp,jdbcType=VARCHAR},
+      </if>
+      <if test="httpsIp != null">
+        https_ip = #{httpsIp,jdbcType=VARCHAR},
+      </if>
+      <if test="lastTime != null">
+        last_time = #{lastTime,jdbcType=TIMESTAMP},
+      </if>
+      update_time = current_timestamp(6),
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.work.demos.mybatis.spider.entity.WscEntity">
+    update t_wsc
+    set names = #{names,jdbcType=VARCHAR},
+      http_ip = #{httpIp,jdbcType=VARCHAR},
+      https_ip = #{httpsIp,jdbcType=VARCHAR},
+      last_time = #{lastTime,jdbcType=TIMESTAMP},
+      update_time = current_timestamp(6)
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectMult" parameterType="java.util.List" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_wsc where 
+    <choose>
+      <when test="list!=null and list.size()>0">
+        id in 
+        <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+          #{item}
+        </foreach>
+      </when>
+      <otherwise>
+        1=0
+      </otherwise>
+    </choose>
+  </select>
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.work.demos.mybatis.spider.mapper.extension.GeneInfoNewExtensionMapper">
+    <resultMap id="BaseResultMap" type="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="pre_num" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="pre_title" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="abstract_zh" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="doi" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="bookcode" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="publish_company" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="publish_year" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="publish_month" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="key_words" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        </constructor>
+    </resultMap>
+    <select id="getgenelast" resultType="java.lang.Integer">
+        select id from t_gene_info_new order by id DESC limit 1
+     </select>
+    <select id="getauthorlast" resultType="java.lang.Integer">
+        select id from t_gene_info_author order by id DESC limit 1
+     </select>
+    <select id="getcompanylast" resultType="java.lang.Integer">
+        select id from t_gene_info_company order by id DESC limit 1
+     </select>
+    <select id="getmappinglast" resultType="java.lang.Long">
+        select id from t_gene_info_mapping order by id DESC limit 1
+     </select>
+    <select id="geneidlist" parameterType="Integer" resultMap="BaseResultMap">
+        select *  from t_gene_info_new where pre_num = #{pre_num,jdbcType=INTEGER}
+     </select>
+
+    <insert id="geneadd">
+        INSERT INTO emp(ename,gender,email,did)
+        VALUES
+        <foreach collection="emps" item="emp" separator=",">
+            (#{emp.eName},#{emp.gender},#{emp.email},#{emp.dept.id})
+        </foreach>
+    </insert>
+
+</mapper>
+
