@@ -3,11 +3,13 @@ package com.work.demos.mybatis.spider.entity;
 import com.bailian.servicetk.core.data.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 /**
- * t_gene_info_author
+ * t_reference_author
  */
-@TableName("t_gene_info_author")
+@Data
+@TableName("t_reference_author")
 public class InfoAuthorEntity extends BaseEntity {
     /**
      * 

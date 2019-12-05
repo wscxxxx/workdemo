@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
- * t_gene_info_new
+ * t_reference
  */
-@TableName("t_gene_info_new")
+@TableName("t_reference")
 public class GeneinfoEntity extends BaseEntity {
     /**
      * 文献编号

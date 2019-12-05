@@ -23,25 +23,25 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from t_gene_info_company
+    from t_reference_company
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from t_gene_info_company
+    delete from t_reference_company
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.work.demos.mybatis.spider.entity.InfoCompanyEntity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_gene_info_company (company)
+    insert into t_reference_company (company)
     values (#{company,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.work.demos.mybatis.spider.entity.InfoCompanyEntity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_gene_info_company
+    insert into t_reference_company
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="company != null">
         company,
@@ -54,7 +54,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.work.demos.mybatis.spider.entity.InfoCompanyEntity">
-    update t_gene_info_company
+    update t_reference_company
     <set>
       <if test="company != null">
         company = #{company,jdbcType=LONGVARCHAR},
@@ -63,7 +63,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.work.demos.mybatis.spider.entity.InfoCompanyEntity">
-    update t_gene_info_company
+    update t_reference_company
     set company = #{company,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -72,7 +72,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from t_gene_info_company where 
+    from t_reference_company where 
     <choose>
       <when test="list!=null and list.size()>0">
         id in 

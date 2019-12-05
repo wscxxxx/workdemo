@@ -16,29 +16,92 @@
             <arg column="key_words" javaType="java.lang.String" jdbcType="VARCHAR"/>
         </constructor>
     </resultMap>
+    <resultMap id="AuthorMap" type="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+            <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+        </constructor>
+    </resultMap>
+
     <select id="getgenelast" resultType="java.lang.Integer">
-        select id from t_gene_info_new order by id DESC limit 1
+        select id from t_reference order by id DESC limit 1
      </select>
     <select id="getauthorlast" resultType="java.lang.Integer">
-        select id from t_gene_info_author order by id DESC limit 1
+        select id from t_reference_author order by id DESC limit 1
      </select>
     <select id="getcompanylast" resultType="java.lang.Integer">
-        select id from t_gene_info_company order by id DESC limit 1
+        select id from t_reference_company order by id DESC limit 1
      </select>
     <select id="getmappinglast" resultType="java.lang.Long">
-        select id from t_gene_info_mapping order by id DESC limit 1
+        select id from t_reference_mapping order by id DESC limit 1
      </select>
     <select id="geneidlist" parameterType="Integer" resultMap="BaseResultMap">
-        select *  from t_gene_info_new where pre_num = #{pre_num,jdbcType=INTEGER}
+        select *  from t_reference where pre_num = #{pre_num,jdbcType=INTEGER}
+     </select>
+    <select id="findautbyname" parameterType="java.lang.String" resultMap="AuthorMap">
+        select *  from t_reference_author where name = #{name,jdbcType=VARCHAR} limit 1
      </select>
 
-    <insert id="geneadd">
-        INSERT INTO emp(ename,gender,email,did)
+
+    <insert id="test" parameterType="java.util.List">
+        INSERT INTO t_wsc(id,names,http_ip,https_ip)
         VALUES
-        <foreach collection="emps" item="emp" separator=",">
-            (#{emp.eName},#{emp.gender},#{emp.email},#{emp.dept.id})
+        <foreach    collection="list" index="index" item="emp"   separator=",">
+            (#{emp.id},#{emp.names},#{emp.httpIp},#{emp.httpsIp})
         </foreach>
     </insert>
 
+
+
+    <insert id="geneadd" parameterType="java.util.List">
+        INSERT INTO t_reference(
+        id,pre_num,pre_title,
+        abstract_en,doi,bookcode,publish_company,publish_year,
+        publish_month,key_words
+        )
+        VALUES
+        <foreach    collection="list" index="index" item="emp"   separator=",">
+            (#{emp.id,jdbcType=INTEGER},
+            #{emp.preNum,jdbcType=INTEGER},
+            #{emp.preTitle,jdbcType=VARCHAR},
+            #{emp.abstractEn,jdbcType=LONGVARCHAR},
+            #{emp.doi,jdbcType=VARCHAR},
+            #{emp.bookcode,jdbcType=VARCHAR},
+            #{emp.publishCompany,jdbcType=VARCHAR},
+            #{emp.publishYear,jdbcType=INTEGER},
+            #{emp.publishMonth,jdbcType=INTEGER},
+            #{emp.keyWords,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+    <insert id="authoradd" parameterType="java.util.List">
+        INSERT INTO t_reference_author(
+        id,name
+        )
+        VALUES
+        <foreach    collection="list" index="index" item="emp"   separator=",">
+            (#{emp.id,jdbcType=INTEGER},#{emp.name,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+    <insert id="companyadd" parameterType="java.util.List">
+        INSERT INTO t_reference_company(
+        id,company  )
+        VALUES
+        <foreach    collection="list" index="index" item="emp"   separator=",">
+            (#{emp.id,jdbcType=INTEGER},
+            #{emp.company,jdbcType=INTEGER} )
+        </foreach>
+    </insert>
+    <insert id="mappingadd" parameterType="java.util.List">
+        INSERT INTO t_reference_mapping(
+        id,pro_num,author_id,
+        company_id   )
+        VALUES
+        <foreach    collection="list" index="index" item="emp"   separator=",">
+            (#{emp.id,jdbcType=INTEGER},
+            #{emp.proNum,jdbcType=INTEGER},
+            #{emp.authorId,jdbcType=VARCHAR},
+            #{emp.companyId,jdbcType=LONGVARCHAR})
+        </foreach>
+    </insert>
 </mapper>
 

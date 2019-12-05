@@ -7,10 +7,15 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 
 /**
- * t_gene_info_mapping
+ * t_reference_mapping
  */
-@TableName("t_gene_info_mapping")
+@TableName("t_reference_mapping")
 public class InfoMappingEntity extends BaseEntityV2 {
+    /**
+     * 主键
+     */
+    @TableField("`id`")
+    private Long id;
 
     /**
      * 文献编号
@@ -41,6 +46,22 @@ public class InfoMappingEntity extends BaseEntityV2 {
 
     public InfoMappingEntity() {
         super();
+    }
+
+    /**
+     * 主键
+     * @return id 主键
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * 主键
+     * @param id 主键
+     */
+    public void setId(Long id) {
+        this.id = id;
     }
 
     /**

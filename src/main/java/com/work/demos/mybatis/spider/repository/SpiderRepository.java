@@ -4,11 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.bailian.servicetk.core.data.BaseRepository;
 import com.work.demos.mybatis.generef.util.Tmp_aut;
 import com.work.demos.mybatis.generef.web.Mapptmp;
-import com.work.demos.mybatis.spider.entity.GeneinfoEntity;
-import com.work.demos.mybatis.spider.entity.InfoAuthorEntity;
-import com.work.demos.mybatis.spider.entity.InfoCompanyEntity;
-import com.work.demos.mybatis.spider.entity.InfoMappingEntity;
+import com.work.demos.mybatis.spider.entity.*;
 import com.work.demos.mybatis.spider.manager.Generes;
+import com.work.demos.mybatis.spider.manager.emp;
 import com.work.demos.mybatis.spider.mapper.GeneinfoEntityMapper;
 import com.work.demos.mybatis.spider.mapper.extension.GeneInfoNewExtensionMapper;
 import com.work.demos.utils.Httpsend2;
@@ -20,6 +18,8 @@ import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +35,7 @@ public class SpiderRepository extends BaseRepository<GeneinfoEntity> implements 
         super(mapper);
         this.mapper = mapper;
     }
-
-    @Override
+     @Override
     public Mapptmp mutationdownland(Mapptmp flag, JSONObject para) {
 
         List<Integer> xx=new ArrayList<>();
@@ -52,23 +51,29 @@ public class SpiderRepository extends BaseRepository<GeneinfoEntity> implements 
             gene_id=flag.getGene_id();
         }else if (flag==null){
             map_id = mapper.getmappinglast();
-            map_id++;
 
+
+            log.info(map_id==null);
             au_id = mapper.getauthorlast();
-            au_id++;
+
             com_id = mapper.getcompanylast();
-            com_id++;
+
             gene_id=mapper.getgenelast();
-            gene_id++;
+            if (gene_id==null||au_id == null || com_id == null || map_id == null) {
+                map_id = Long.valueOf(1);
+                au_id = 1;
+                com_id = 1;
+                gene_id=1;
+            }else {
+                map_id++;
+                au_id++;
+                com_id++;
+                gene_id++;
+            }
         }
 
-        if (au_id == null && com_id == null && map_id == null) {
-            map_id = Long.valueOf(1);
-            au_id = 1;
-            com_id = 1;
-            gene_id=1;
-        }
-        System.out.println(au_id + "哈哈" + com_id);
+
+         log.info(au_id + "哈哈" + com_id);
         List<InfoAuthorEntity> authorEntityList = new ArrayList<>();
         List<InfoCompanyEntity> companyEntityList = new ArrayList<>();
         List<GeneinfoEntity> infoEntities = new ArrayList<>();
@@ -93,12 +98,12 @@ public class SpiderRepository extends BaseRepository<GeneinfoEntity> implements 
             }while (result!=null);
         }
         Document jsoup = Jsoup.parse(result);
-        System.out.println(jsoup.select("h3[class=result_count left]").text());
+         log.info(jsoup.select("h3[class=result_count left]").text());
         Elements elements = jsoup.select("div[class=rprt abstract]");
         log.info(elements.size());
         int a = 0;
         for (Element element : elements) {
-            System.out.println("-----------------------------------");
+            log.info("-----------------------------------");
 
             int code = ++a;
             log.info("第" + code + "个");
@@ -128,12 +133,15 @@ public class SpiderRepository extends BaseRepository<GeneinfoEntity> implements 
             log.info("\n编号：" + prenum + "\n标题：" + title + "\n发布信息公司：" + publishcom + "\n年：" + publishtime
                     + "\n发布月：" + publishmonth + "\n书号：" + bookcode + "\ndoi：" + doi + "\n作者：" + author + "\n" + "机构：" + company +
                     "\n摘要：" + abstr + "\n关键字：" + keywords);
-            if (mapper.geneidlist(Integer.parseInt(prenum))!=null){
-                log.info("已有,跳过");
+            GeneinfoEntity entity=mapper.geneidlist(Integer.parseInt(prenum));
+            if (entity!=null){
+                log.info(entity.getPreTitle()+"已有,跳过");
                 continue;
             }
             for (Tmp_aut tmp_aut : alls) {
                 InfoAuthorEntity authorEntity = new InfoAuthorEntity();
+                InfoAuthorEntity aut=mapper. findautbyname( tmp_aut.getAuthor());
+
                 authorEntity.setId(au_id);
                 authorEntity.setName(tmp_aut.getAuthor());
                 if (tmp_aut.getCompanys() == null) {
@@ -148,11 +156,6 @@ public class SpiderRepository extends BaseRepository<GeneinfoEntity> implements 
                 } else {
                     for (String rel_company : tmp_aut.getCompanys()) {
                         InfoCompanyEntity companyEntity = new InfoCompanyEntity();
-
-                        companyEntity.setId(com_id);
-                        companyEntity.setCompany(rel_company);
-                        companyEntityList.add(companyEntity);
-
                         InfoMappingEntity mappingEntity = new InfoMappingEntity();
                         mappingEntity.setAuthorId(au_id);
                         mappingEntity.setId(Long.valueOf(map_id));
@@ -160,8 +163,23 @@ public class SpiderRepository extends BaseRepository<GeneinfoEntity> implements 
                         mappingEntity.setCompanyId(com_id);
                         mappingEntityList.add(mappingEntity);
                         ++map_id;
+                        if (aut!=null){
+                            log.info(tmp_aut.getAuthor()+"已有，跳过");
+                            continue;
+                        }
+                        log.info(tmp_aut.getAuthor()+"没有！！");
+                        companyEntity.setId(com_id);
+                        companyEntity.setCompany(rel_company);
+                        companyEntityList.add(companyEntity);
+
+
+
                         ++com_id;
                     }
+                }
+                if (aut!=null){
+                    log.info("已有，跳过");
+                    continue;
                 }
                 ++au_id;
                 authorEntityList.add(authorEntity);
@@ -172,8 +190,14 @@ public class SpiderRepository extends BaseRepository<GeneinfoEntity> implements 
             infoEntity.setKeyWords(keywords);
             infoEntity.setAbstractEn(abstr);
             infoEntity.setPreNum(Integer.valueOf(prenum));
-            infoEntity.setPublishYear(Integer.valueOf(publishtime));
-            infoEntity.setPublishMonth(getdata(publishmonth));
+            try {
+                infoEntity.setPublishYear(Integer.valueOf(publishtime));
+                infoEntity.setPublishMonth(getdata(publishmonth));
+
+            }catch (NumberFormatException e){
+                infoEntity.setPublishYear(getdata(publishmonth));
+
+            }
             infoEntity.setPublishCompany(publishcom);
             infoEntity.setBookcode(bookcode);
             infoEntity.setDoi(doi);
@@ -181,19 +205,34 @@ public class SpiderRepository extends BaseRepository<GeneinfoEntity> implements 
             infoEntities.add(infoEntity);
             ++gene_id;
         }
-        System.out.println("文献"+infoEntities.size());
-        System.out.println("总共"+mappingEntityList.size());
-        System.out.println("作者"+authorEntityList.size());
-        System.out.println("机构"+companyEntityList.size());
+         log.info("文献"+infoEntities.size());
+         log.info("总共"+mappingEntityList.size());
+         log.info("作者"+authorEntityList.size());
+         log.info("机构"+companyEntityList.size());
         Mapptmp results=new Mapptmp();
+        if (infoEntities.size()==0){
+            return null;
+        }
+
+
+        int g_r=mapper.geneadd(infoEntities);
+        int a_r= mapper.authoradd(authorEntityList);
+        int c_r=mapper.companyadd(companyEntityList);
+        int m_r=mapper.mappingadd(mappingEntityList);
+        log.info(g_r+"\n"+a_r+"\n"+c_r+"\n"+m_r);
 
 
         results.setAut_id(au_id);
         results.setMap_id(map_id);
         results.setCom_id(com_id);
         results.setGene_id(gene_id);
-        System.out.println("当前："+results+"基因："+gene_id);
-        return results;
+         log.info("当前："+results+"基因："+gene_id);
+         try {
+             Thread.sleep(5*1000);
+         } catch (InterruptedException e) {
+             e.printStackTrace();
+         }
+         return results;
     }
 
 
@@ -284,9 +323,11 @@ public class SpiderRepository extends BaseRepository<GeneinfoEntity> implements 
     }
     @Override
     public Mapptmp testmutationdownland( ) {
-        GeneinfoEntity last= mapper.geneidlist(30451023);
-       log.info(last ==null);
-        return null;
+
+        InfoAuthorEntity aut=mapper. findautbyname( "McLaugxhlin KA");
+        log.info(aut);
+
+         return null;
     }
 
     @Override

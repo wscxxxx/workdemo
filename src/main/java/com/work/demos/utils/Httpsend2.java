@@ -108,9 +108,9 @@ public class Httpsend2 {
         HttpPost httpPost = new HttpPost(realuri);
         /* 设置超时 */
         RequestConfig defaultRequestConfig = RequestConfig.custom().
-                setSocketTimeout(20*1000).
-                setConnectTimeout(20*1000).
-                setConnectionRequestTimeout(20*1000).
+                setSocketTimeout(30*1000).
+                setConnectTimeout(30*1000).
+                setConnectionRequestTimeout(30*1000).
                 build();
         httpPost.setConfig(defaultRequestConfig);
         httpPost.addHeader("Content-type", "application/x-www-form-urlencoded");

@@ -13,25 +13,25 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from t_gene_info_author
+    from t_reference_author
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from t_gene_info_author
+    delete from t_reference_author
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_gene_info_author (name)
+    insert into t_reference_author (name)
     values (#{name,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_gene_info_author
+    insert into t_reference_author
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="name != null">
         name,
@@ -44,7 +44,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
-    update t_gene_info_author
+    update t_reference_author
     <set>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
@@ -53,14 +53,14 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
-    update t_gene_info_author
+    update t_reference_author
     set name = #{name,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectMult" parameterType="java.util.List" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from t_gene_info_author where 
+    from t_reference_author where 
     <choose>
       <when test="list!=null and list.size()>0">
         id in 

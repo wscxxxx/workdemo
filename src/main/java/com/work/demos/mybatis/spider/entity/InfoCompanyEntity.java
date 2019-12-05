@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
- * t_gene_info_company
+ * t_reference_company
  */
-@TableName("t_gene_info_company")
+@TableName("t_reference_company")
 public class InfoCompanyEntity extends BaseEntity {
     /**
      * 

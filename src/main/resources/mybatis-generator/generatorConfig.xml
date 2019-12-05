@@ -33,7 +33,7 @@
 
         <!-- 数据库连接 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://39.96.194.226:3306/mailuo?useSSL=false&amp;charset='UTF8'&amp;allowPublicKeyRetrieval=true"
+                        connectionURL="jdbc:mysql://39.96.194.226:3306/mailuo_sd?useSSL=false&amp;charset='UTF8'&amp;allowPublicKeyRetrieval=true"
                         userId="mailuo"
                         password="xb_PXR9jL_x=">
             <property name="useInformationSchema" value="true" />
@@ -75,37 +75,37 @@
 <!--            <property name="rootClass" value="com.baomidou.mybatisplus.core.mapper.BaseMapper"/>-->
         </javaClientGenerator>
 
-        <table schema="mailuo" tableName="t_gene_info_new" domainObjectName="GeneinfoEntity"
-               enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <!--单独生成mapping表-->
-        <!--<table schema="mailuo" tableName="t_gene_info_mapping" domainObjectName="InfoMappingEntity"-->
+        <!--<table schema="mailuo_sd" tableName="t_reference" domainObjectName="GeneinfoEntity"-->
                <!--enableCountByExample="false" enableUpdateByExample="false"-->
                <!--enableDeleteByExample="false" enableSelectByExample="false"-->
                <!--selectByExampleQueryId="false">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
-        <table schema="mailuo" tableName="t_gene_info_company" domainObjectName="InfoCompanyEntity"
+        <!--单独生成mapping表-->
+        <table schema="mailuo_sd" tableName="t_reference_mapping" domainObjectName="InfoMappingEntity"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table schema="mailuo" tableName="t_gene_info_author" domainObjectName="InfoAuthorEntity"
-               enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table schema="mailuo" tableName="t_wsc" domainObjectName="WscEntity"
-               enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        <!--<table schema="mailuo_sd" tableName="t_reference_company" domainObjectName="InfoCompanyEntity"-->
+               <!--enableCountByExample="false" enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false" enableSelectByExample="false"-->
+               <!--selectByExampleQueryId="false">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table schema="mailuo_sd" tableName="t_reference_author" domainObjectName="InfoAuthorEntity"-->
+               <!--enableCountByExample="false" enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false" enableSelectByExample="false"-->
+               <!--selectByExampleQueryId="false">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table schema="mailuo" tableName="t_wsc" domainObjectName="WscEntity"-->
+               <!--enableCountByExample="false" enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false" enableSelectByExample="false"-->
+               <!--selectByExampleQueryId="false">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
 
         <!--<table schema="mailuo" tableName="t_tumour" domainObjectName="TumorEntity"-->
                <!--enableCountByExample="false" enableUpdateByExample="false"-->

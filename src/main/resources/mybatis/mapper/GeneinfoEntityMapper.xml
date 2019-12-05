@@ -42,18 +42,18 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from t_gene_info_new
+    from t_reference
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from t_gene_info_new
+    delete from t_reference
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_gene_info_new (pre_num, pre_title, abstract_zh, 
+    insert into t_reference (pre_num, pre_title, abstract_zh, 
       doi, bookcode, publish_company, 
       publish_year, publish_month, key_words, 
       abstract_en)
@@ -66,7 +66,7 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_gene_info_new
+    insert into t_reference
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="preNum != null">
         pre_num,
@@ -133,7 +133,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
-    update t_gene_info_new
+    update t_reference
     <set>
       <if test="preNum != null">
         pre_num = #{preNum,jdbcType=INTEGER},
@@ -169,7 +169,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
-    update t_gene_info_new
+    update t_reference
     set pre_num = #{preNum,jdbcType=INTEGER},
       pre_title = #{preTitle,jdbcType=VARCHAR},
       abstract_zh = #{abstractZh,jdbcType=INTEGER},
@@ -183,7 +183,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
-    update t_gene_info_new
+    update t_reference
     set pre_num = #{preNum,jdbcType=INTEGER},
       pre_title = #{preTitle,jdbcType=VARCHAR},
       abstract_zh = #{abstractZh,jdbcType=INTEGER},
@@ -200,7 +200,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from t_gene_info_new where 
+    from t_reference where 
     <choose>
       <when test="list!=null and list.size()>0">
         id in 
