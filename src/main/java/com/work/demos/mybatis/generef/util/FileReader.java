@@ -1,5 +1,7 @@
 package com.work.demos.mybatis.generef.util;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
@@ -13,15 +15,17 @@ public class FileReader {
     /**
      * 以字符为单位读取文件，常用于读文本，数字等类型的文件
      */
-    public String readFileByChars(String fileName) {
+    public synchronized String   readFileByChars(String fileName) {
         String result="";
          Reader reader = null;
-         try {
+        FileInputStream file=null;
+          try {
 
             // 一次读多个字符
             char[] tempchars = new char[30];
             int charread = 0;
-            reader = new InputStreamReader(new FileInputStream(fileName));
+              file=new FileInputStream(fileName);
+            reader = new InputStreamReader(file);
             StringBuffer results = new StringBuffer();
             // 读入多个字符到字符数组中，charread为一次读取字符数
             while ((charread = reader.read(tempchars)) != -1) {
@@ -43,7 +47,8 @@ public class FileReader {
             }
             result=results.toString();
 
-
+              Document jsoup = Jsoup.parse(result);
+              System.out.println( jsoup.select("h3[class=result_count left]").text());
          } catch (Exception e1) {
             e1.printStackTrace();
         } finally {
@@ -53,6 +58,8 @@ public class FileReader {
                 } catch (IOException e1) {
                 }
             }
+
+
         }
 
         return result;

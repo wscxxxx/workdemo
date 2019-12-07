@@ -1,7 +1,6 @@
 package com.work.demos.mybatis.spider.mapper.extension;
 
 import com.work.demos.mybatis.spider.entity.*;
-import com.work.demos.mybatis.spider.manager.emp;
 import com.work.demos.mybatis.spider.mapper.GeneinfoEntityMapper;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.stereotype.Component;

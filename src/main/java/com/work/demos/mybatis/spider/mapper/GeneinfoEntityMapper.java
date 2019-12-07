@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface GeneinfoEntityMapper extends IMapper<GeneinfoEntity> {
+public interface GeneinfoEntityMapper  {
     int deleteByPrimaryKey(Integer id);
 
     int insert(GeneinfoEntity record);
@@ -16,8 +16,6 @@ public interface GeneinfoEntityMapper extends IMapper<GeneinfoEntity> {
     GeneinfoEntity selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(GeneinfoEntity record);
-
-    int updateByPrimaryKeyWithBLOBs(GeneinfoEntity record);
 
     int updateByPrimaryKey(GeneinfoEntity record);
 

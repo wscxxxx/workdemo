@@ -22,21 +22,20 @@ public class SpiderWeb {
     private final Log log = LogFactory.getLog(SpiderWeb.class);
     @Autowired
     SpiderService service;
-    @RequestMapping(value = "/domain", method = RequestMethod.GET)
-    public Result domain(@RequestParam int page)  {
-        String results =new FileReader().readFileByChars("/home/wangshichen/文档/work/postbody.json");
-        com.alibaba.fastjson.JSONObject jsonObject = JSON.parseObject(results);
-        Mapptmp res=null;
-        for (int i=page;i<10496;i++){
-            log.info("--------------------------------------------------");
-            log.info("第"+i+"页");
-            jsonObject.put("EntrezSystem2.PEntrez.PubMed.Pubmed_ResultsPanel.Pubmed_Pager.CurrPage",i);
-            jsonObject.put("EntrezSystem2.PEntrez.PubMed.Pubmed_Facets.FacetsUrlFrag","filters=;humans");
-            res= service.domain(res,jsonObject);
-        }
+    @RequestMapping(value = "/save", method = RequestMethod.GET)
+    public Result domain(@RequestParam int page )  {
+
+        service.savetosql(page);
+
+        return new Result(ResultConstant.SUCCESS_STATUE,"" );
+    }
+
+    @RequestMapping(value = "/dowland", method = RequestMethod.GET)
+    public void dowland(@RequestParam int page)  {
+        System.out.println(page);
+       service.domain(page);
 
 
-        return new Result(ResultConstant.SUCCESS_STATUE,"",res);
     }
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public Result test(@RequestParam int page)  {

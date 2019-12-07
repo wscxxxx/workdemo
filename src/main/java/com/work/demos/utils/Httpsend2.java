@@ -89,7 +89,7 @@ public class Httpsend2 {
         return result;
     }
 
-    public static String postres(String url, String path, JSONObject para) throws Exception {
+    public   static String postres(String url, String path, JSONObject para) throws Exception {
         URIBuilder uri = new URIBuilder(new URI(url));
         if ("https".equals(uri.getScheme()))
             head = "https";
@@ -118,7 +118,7 @@ public class Httpsend2 {
         httpPost.setHeader("Accept-Encoding","gzip, deflate");
 
 
-        httpPost.setHeader("Cookie","_ga=GA1.2.548797481.1574410649; ncbi_sid=CE8C0576DD799941_0252SID; entrezSort=pubmed:PublicationDate; _gid=GA1.2.1373036783.1575513850; _gat_ncbiSg=1; _gat_dap=1; WebEnv=18E5iKur2a8r1KXMhGTscac4232POMZVP-KwgeumqT-AGANDU9F1s9NJNK4Q2JikQnh2Qkn1OmZLQi_nLMJaCwdc6bJLca0IaNe%40CE8C0576DD799941_0252SID; ncbi_pinger=N4IgDgTgpgbg+mAFgSwCYgFwgMIFEAcAQgCK4Bsup+ZALAIKECMADK222dgGLM2PYA6ALZwATIxAAaEAFcAdgBsA9gENUcqAA8ALplCjMIKHO3QAXlJABmQ2BkAjIVHTSahlfYDOplQGNd0gCshpZk7l4+/pYA7IaI2kIKlviGgcyWAJy2DgrIvirayEpyqAVQlowSWBLSjDZYgaJpZOm1blgAZn5Q2nC+iCpyAObltWFYKgpJtbGdk56jIIwpcwoLlqLpWHhEpBRUtAws7OycPHyCIuIbVUYm5hh2js4YHt4QftoYAHIA8t+4DYGLAAdzBAjkvnsyAhCiEEOQiAEQyUMA2WWqNGiYWkVi2IHweMsVlujCxKVxwIJzGCuPqIC6a0WVnaIFMMmZKxAxIxIBozAyrT5+PwNJqfPpzAEojIAnFNFZ8mUag0OksNGCWCFgXpZJllkCrMYaQN4xA2tm5tCt1E/NiAF97UA===");
+        httpPost.setHeader("Cookie","_ga=GA1.2.548797481.1574410649; ncbi_sid=CE8C0576DD799941_0252SID; entrezSort=pubmed:PublicationDate; _gid=GA1.2.1081969427.1575733083; _gat_ncbiSg=1; _gat_dap=1; WebEnv=1xWZik6ea_z0zEh_a-ql93rn2lS9TktveuFwyqsewgGi-P04npehaBk_i_ryWXwytc_EVix6zm8rEKW-soq_3Ct6e-jBA1HObD5%40CE8C0576DD799941_0252SID; ncbi_pinger=N4IgDgTgpgbg+mAFgSwCYgFwgIIBYCsATPgGwBiAHACICiAQtiSdgIwAMHnn+A7AMxtcLQgDoAtnBY8QAGhABjADbJ5AawB2UAB4AXTKDaYQAM2SK4MAIaKZpxTqgQ4AcwhgZty/Kg7P3nXDyAPbqvsE2OgDuQYFBirIgLEZwiACuEpbqyH4+UKhwAM5QlhDyiAl8AJxGlWx8JAm4hlgsFGwU1XK4uEZKKhrael34RoZdDVjG1kWN0i0kYyC4FEZ8PJ1L1VgJ+M0giDo6YAUYAPSnkZci6vIARsjXimLXyIgizkEwp2Cpt2J5AGIdkltnIiEYABLpTIFEAAXzkqXUiiCllQml0+hAfD4Rimihmcj4PSwOggqSgFRWoOxWxAtR4hEae1awhGXRJICRKLRGKGSxGLR2ExAi14owSJBB2IoJGkCIUQTEYhCfKxTKwUFC0AAXhUjD8/nlGkZLLcCmSvPzBSBJabzZb5Py5vsdGJ4nJqSBCBwEnTDcp5JYdMgQqhg5S5CxpUko7isBQKPgiCso5zUMgCmBFJYAJ6BRCZZyRxIi6wexIu/GExJe6sln1GPBEUiUWgMJisLjd3gCISiCRSBKEaVaslQHUYQ3/VAYM0WiBWjAAOQA8suaMONSBLpFrncHsjnlk3h8YMO6SxcDwGkS9hQBBUY7hCLfsdu2uylvHRSJXyJYxAfAfyvV8dk5F8VjhOEgA==");
         StringBuffer sb=new StringBuffer();
 
         for (String key:para.keySet()){

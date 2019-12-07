@@ -7,5 +7,6 @@ import com.work.demos.mybatis.spider.entity.WscEntity;
 public interface SpiderService {
      String getall();
      void getlast( );
-     Mapptmp domain(Mapptmp flag, JSONObject para);
+     void domain(int page);
+     void savetosql(int page );
 }

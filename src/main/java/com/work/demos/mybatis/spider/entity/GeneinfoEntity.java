@@ -8,7 +8,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * t_reference
  */
 @TableName("t_reference")
-public class GeneinfoEntity extends BaseEntity {
+public class GeneinfoEntity   {
+
+    @TableField("`id`")
+    private Integer id;
+
     /**
      * 文献编号
      */
@@ -20,6 +24,12 @@ public class GeneinfoEntity extends BaseEntity {
      */
     @TableField("`pre_title`")
     private String preTitle;
+
+    /**
+     * 摘要英文
+     */
+    @TableField("`abstract_en`")
+    private String abstractEn;
 
     /**
      * 摘要中文
@@ -64,36 +74,24 @@ public class GeneinfoEntity extends BaseEntity {
     private String keyWords;
 
     /**
-     * 摘要英文
+     * 是否已解析关键字  0-未解析  1-已解析
      */
-    @TableField("`abstract_en`")
-    private String abstractEn;
+    @TableField("`is_parse_keyword`")
+    private String isParseKeyword;
 
-    public GeneinfoEntity(Integer id, Integer preNum, String preTitle, Integer abstractZh, String doi, String bookcode, String publishCompany, Integer publishYear, Integer publishMonth, String keyWords) {
+    public GeneinfoEntity(Integer id, Integer preNum, String preTitle, String abstractEn, Integer abstractZh, String doi, String bookcode, String publishCompany, Integer publishYear, Integer publishMonth, String keyWords, String isParseKeyword) {
         this.id = id;
         this.preNum = preNum;
         this.preTitle = preTitle;
-        this.abstractZh = abstractZh;
-        this.doi = doi;
-        this.bookcode = bookcode;
-        this.publishCompany = publishCompany;
-        this.publishYear = publishYear;
-        this.publishMonth = publishMonth;
-        this.keyWords = keyWords;
-    }
-
-    public GeneinfoEntity(Integer id, Integer preNum, String preTitle, Integer abstractZh, String doi, String bookcode, String publishCompany, Integer publishYear, Integer publishMonth, String keyWords, String abstractEn) {
-        this.id = id;
-        this.preNum = preNum;
-        this.preTitle = preTitle;
-        this.abstractZh = abstractZh;
-        this.doi = doi;
-        this.bookcode = bookcode;
-        this.publishCompany = publishCompany;
-        this.publishYear = publishYear;
-        this.publishMonth = publishMonth;
-        this.keyWords = keyWords;
         this.abstractEn = abstractEn;
+        this.abstractZh = abstractZh;
+        this.doi = doi;
+        this.bookcode = bookcode;
+        this.publishCompany = publishCompany;
+        this.publishYear = publishYear;
+        this.publishMonth = publishMonth;
+        this.keyWords = keyWords;
+        this.isParseKeyword = isParseKeyword;
     }
 
     public GeneinfoEntity() {
@@ -116,6 +114,14 @@ public class GeneinfoEntity extends BaseEntity {
         this.preNum = preNum;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     /**
      * 
      * @return pre_title 
@@ -130,6 +136,22 @@ public class GeneinfoEntity extends BaseEntity {
      */
     public void setPreTitle(String preTitle) {
         this.preTitle = preTitle == null ? null : preTitle.trim();
+    }
+
+    /**
+     * 摘要英文
+     * @return abstract_en 摘要英文
+     */
+    public String getAbstractEn() {
+        return abstractEn;
+    }
+
+    /**
+     * 摘要英文
+     * @param abstractEn 摘要英文
+     */
+    public void setAbstractEn(String abstractEn) {
+        this.abstractEn = abstractEn == null ? null : abstractEn.trim();
     }
 
     /**
@@ -245,18 +267,18 @@ public class GeneinfoEntity extends BaseEntity {
     }
 
     /**
-     * 摘要英文
-     * @return abstract_en 摘要英文
+     * 是否已解析关键字  0-未解析  1-已解析
+     * @return is_parse_keyword 是否已解析关键字  0-未解析  1-已解析
      */
-    public String getAbstractEn() {
-        return abstractEn;
+    public String getIsParseKeyword() {
+        return isParseKeyword;
     }
 
     /**
-     * 摘要英文
-     * @param abstractEn 摘要英文
+     * 是否已解析关键字  0-未解析  1-已解析
+     * @param isParseKeyword 是否已解析关键字  0-未解析  1-已解析
      */
-    public void setAbstractEn(String abstractEn) {
-        this.abstractEn = abstractEn == null ? null : abstractEn.trim();
+    public void setIsParseKeyword(String isParseKeyword) {
+        this.isParseKeyword = isParseKeyword == null ? null : isParseKeyword.trim();
     }
 }

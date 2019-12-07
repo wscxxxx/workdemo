@@ -24,22 +24,22 @@
     </resultMap>
 
     <select id="getgenelast" resultType="java.lang.Integer">
-        select id from t_reference order by id DESC limit 1
+        select id from t_reference_copy1 order by id DESC limit 1
      </select>
     <select id="getauthorlast" resultType="java.lang.Integer">
-        select id from t_reference_author order by id DESC limit 1
+        select id from t_reference_author_copy1 order by id DESC limit 1
      </select>
     <select id="getcompanylast" resultType="java.lang.Integer">
-        select id from t_reference_company order by id DESC limit 1
+        select id from t_reference_company_copy1 order by id DESC limit 1
      </select>
     <select id="getmappinglast" resultType="java.lang.Long">
-        select id from t_reference_mapping order by id DESC limit 1
+        select id from t_reference_mapping_copy1 order by id DESC limit 1
      </select>
     <select id="geneidlist" parameterType="Integer" resultMap="BaseResultMap">
-        select *  from t_reference where pre_num = #{pre_num,jdbcType=INTEGER}
+        select *  from t_reference_copy1 where pre_num = #{pre_num,jdbcType=INTEGER}
      </select>
     <select id="findautbyname" parameterType="java.lang.String" resultMap="AuthorMap">
-        select *  from t_reference_author where name = #{name,jdbcType=VARCHAR} limit 1
+        select *  from t_reference_author_copy1 where name = #{name,jdbcType=VARCHAR} limit 1
      </select>
 
 
@@ -54,7 +54,7 @@
 
 
     <insert id="geneadd" parameterType="java.util.List">
-        INSERT INTO t_reference(
+        INSERT INTO t_reference_copy1(
         id,pre_num,pre_title,
         abstract_en,doi,bookcode,publish_company,publish_year,
         publish_month,key_words
@@ -74,7 +74,7 @@
         </foreach>
     </insert>
     <insert id="authoradd" parameterType="java.util.List">
-        INSERT INTO t_reference_author(
+        INSERT INTO t_reference_author_copy1(
         id,name
         )
         VALUES
@@ -83,7 +83,7 @@
         </foreach>
     </insert>
     <insert id="companyadd" parameterType="java.util.List">
-        INSERT INTO t_reference_company(
+        INSERT INTO t_reference_company_copy1(
         id,company  )
         VALUES
         <foreach    collection="list" index="index" item="emp"   separator=",">
@@ -92,7 +92,7 @@
         </foreach>
     </insert>
     <insert id="mappingadd" parameterType="java.util.List">
-        INSERT INTO t_reference_mapping(
+        INSERT INTO t_reference_mapping_copy1(
         id,pro_num,author_id,
         company_id   )
         VALUES
