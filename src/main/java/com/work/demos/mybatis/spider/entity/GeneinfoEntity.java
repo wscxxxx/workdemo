@@ -8,10 +8,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * t_reference
  */
 @TableName("t_reference")
-public class GeneinfoEntity   {
+public class GeneinfoEntity extends BaseEntity {
 
-    @TableField("`id`")
-    private Integer id;
+
 
     /**
      * 文献编号
@@ -112,14 +111,6 @@ public class GeneinfoEntity   {
      */
     public void setPreNum(Integer preNum) {
         this.preNum = preNum;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     /**

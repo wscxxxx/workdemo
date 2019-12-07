@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface GeneinfoEntityMapper  {
+public interface GeneinfoEntityMapper extends IMapper<GeneinfoEntity> {
     int deleteByPrimaryKey(Integer id);
 
     int insert(GeneinfoEntity record);
