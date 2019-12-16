@@ -47,8 +47,7 @@ public class FileReader {
             }
             result=results.toString();
 
-              Document jsoup = Jsoup.parse(result);
-              System.out.println( jsoup.select("h3[class=result_count left]").text());
+
          } catch (Exception e1) {
             e1.printStackTrace();
         } finally {

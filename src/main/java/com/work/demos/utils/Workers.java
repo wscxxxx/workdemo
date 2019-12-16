@@ -50,14 +50,14 @@ public class Workers {
     }
 
     public void dowlandweb(int page) {
-        String results = new FileReader().readFileByChars("/home/wangshichen/文档/work/postbody.json");
+        String results = new FileReader().readFileByChars("/home/wangshichen/文档/work/biomarker.json");
 
-        ExecutorService threadPool = Executors.newFixedThreadPool(20);
+        ExecutorService threadPool = Executors.newFixedThreadPool(5);
         CompletionService<String> cs = new ExecutorCompletionService<String>(threadPool);
-        for (int i = page; i < 2627; i++) {
+        for (int i = page; i < 3341; i++) {
             int index = i;
             String fileName = "第" + index + "页";
-            String filePath = "/media/wangshichen/文件/webs/";
+            String filePath = "/media/wangshichen/文件/webs/biomarker/";
             cs.submit(() -> {
                 System.out.println(fileName);
                 // TODO
@@ -74,8 +74,7 @@ public class Workers {
                     System.out.println(doc.select("h3[class=result_count left]").text());
                     //指定本地文件夹存储文件
 
-
-                    save(filePath + fileName, result);
+                     save(filePath + fileName, result);
                     System.out.println("写入成功");
                     System.out.println("保存的位置为：" + filePath + fileName);
                 } catch (Exception e) {
@@ -97,7 +96,7 @@ public class Workers {
         threadPool.shutdown();
 
 
-        for(int i =page ; i<2627;i++) {
+        for(int i =page ; i<3341;i++) {
             try {
 
                 String rest=cs.take().get();

@@ -17,6 +17,8 @@ public interface GeneinfoEntityMapper extends IMapper<GeneinfoEntity> {
 
     int updateByPrimaryKeySelective(GeneinfoEntity record);
 
+    int updateByPrimaryKeyWithBLOBs(GeneinfoEntity record);
+
     int updateByPrimaryKey(GeneinfoEntity record);
 
     List<GeneinfoEntity> selectMult(List<Long> ids);

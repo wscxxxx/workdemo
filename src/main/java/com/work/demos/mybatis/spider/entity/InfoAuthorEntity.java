@@ -5,15 +5,19 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
- * t_reference_author
+ * t_reference_author_copy1
  */
-@TableName("t_reference_author")
+@TableName("t_reference_author_copy1")
 public class InfoAuthorEntity extends BaseEntity {
     /**
      * 
      */
     @TableField("`name`")
     private String name;
+
+    public InfoAuthorEntity(Integer id) {
+        this.id = id;
+    }
 
     public InfoAuthorEntity(Integer id, String name) {
         this.id = id;

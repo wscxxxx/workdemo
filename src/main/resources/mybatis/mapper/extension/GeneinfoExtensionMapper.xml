@@ -4,16 +4,17 @@
 <mapper namespace="com.work.demos.mybatis.spider.mapper.extension.GeneInfoNewExtensionMapper">
     <resultMap id="BaseResultMap" type="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
         <constructor>
-            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="pre_num" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="pre_title" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="abstract_zh" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="doi" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="bookcode" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="publish_company" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="publish_year" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="publish_month" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="key_words" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+            <arg column="pre_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+            <arg column="abstract_en" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <arg column="abstract_zh" javaType="java.lang.Integer" jdbcType="INTEGER" />
+            <arg column="doi" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <arg column="bookcode" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <arg column="publish_company" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <arg column="publish_year" javaType="java.lang.Integer" jdbcType="INTEGER" />
+            <arg column="publish_month" javaType="java.lang.Integer" jdbcType="INTEGER" />
+            <arg column="key_words" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <arg column="is_parse_keyword" javaType="java.lang.String" jdbcType="VARCHAR" />
         </constructor>
     </resultMap>
     <resultMap id="AuthorMap" type="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
@@ -24,22 +25,22 @@
     </resultMap>
 
     <select id="getgenelast" resultType="java.lang.Integer">
-        select id from t_reference_copy1 order by id DESC limit 1
+        select id from t_reference order by id DESC limit 1
      </select>
     <select id="getauthorlast" resultType="java.lang.Integer">
-        select id from t_reference_author_copy1 order by id DESC limit 1
+        select id from t_reference_author order by id DESC limit 1
      </select>
     <select id="getcompanylast" resultType="java.lang.Integer">
-        select id from t_reference_company_copy1 order by id DESC limit 1
+        select id from t_reference_company order by id DESC limit 1
      </select>
     <select id="getmappinglast" resultType="java.lang.Long">
-        select id from t_reference_mapping_copy1 order by id DESC limit 1
+        select id from t_reference_mapping order by id DESC limit 1
      </select>
     <select id="geneidlist" parameterType="Integer" resultMap="BaseResultMap">
-        select *  from t_reference_copy1 where pre_num = #{pre_num,jdbcType=INTEGER}
+        select *  from t_reference where pre_num = #{pre_num,jdbcType=INTEGER}
      </select>
     <select id="findautbyname" parameterType="java.lang.String" resultMap="AuthorMap">
-        select *  from t_reference_author_copy1 where name = #{name,jdbcType=VARCHAR} limit 1
+        select *  from t_reference_author where name = #{name,jdbcType=VARCHAR} limit 1
      </select>
 
 
@@ -54,7 +55,7 @@
 
 
     <insert id="geneadd" parameterType="java.util.List">
-        INSERT INTO t_reference_copy1(
+        INSERT INTO t_reference(
         id,pre_num,pre_title,
         abstract_en,doi,bookcode,publish_company,publish_year,
         publish_month,key_words
@@ -74,7 +75,7 @@
         </foreach>
     </insert>
     <insert id="authoradd" parameterType="java.util.List">
-        INSERT INTO t_reference_author_copy1(
+        INSERT INTO t_reference_author(
         id,name
         )
         VALUES
@@ -83,7 +84,7 @@
         </foreach>
     </insert>
     <insert id="companyadd" parameterType="java.util.List">
-        INSERT INTO t_reference_company_copy1(
+        INSERT INTO t_reference_company(
         id,company  )
         VALUES
         <foreach    collection="list" index="index" item="emp"   separator=",">
@@ -92,7 +93,7 @@
         </foreach>
     </insert>
     <insert id="mappingadd" parameterType="java.util.List">
-        INSERT INTO t_reference_mapping_copy1(
+        INSERT INTO t_reference_mapping(
         id,pro_num,author_id,
         company_id   )
         VALUES

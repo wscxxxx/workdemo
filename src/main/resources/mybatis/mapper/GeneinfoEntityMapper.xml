@@ -5,7 +5,6 @@
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="pre_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="pre_title" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="abstract_en" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="abstract_zh" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="doi" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -17,44 +16,62 @@
       <arg column="is_parse_keyword" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="pre_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="abstract_en" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="abstract_zh" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="doi" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="bookcode" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="publish_company" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="publish_year" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="publish_month" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="key_words" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="is_parse_keyword" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="pre_title" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
   <sql id="Base_Column_List">
-    id, pre_num, pre_title, abstract_en, abstract_zh, doi, bookcode, publish_company, 
-    publish_year, publish_month, key_words, is_parse_keyword
+    id, pre_num, abstract_en, abstract_zh, doi, bookcode, publish_company, publish_year, 
+    publish_month, key_words, is_parse_keyword
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <sql id="Blob_Column_List">
+    pre_title
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
-    from t_reference
+    ,
+    <include refid="Blob_Column_List" />
+    from t_reference_copy1
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from t_reference
+    delete from t_reference_copy1
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_reference (pre_num, pre_title, abstract_en, 
-      abstract_zh, doi, bookcode, 
-      publish_company, publish_year, publish_month, 
-      key_words, is_parse_keyword)
-    values (#{preNum,jdbcType=INTEGER}, #{preTitle,jdbcType=VARCHAR}, #{abstractEn,jdbcType=VARCHAR}, 
-      #{abstractZh,jdbcType=INTEGER}, #{doi,jdbcType=VARCHAR}, #{bookcode,jdbcType=VARCHAR}, 
-      #{publishCompany,jdbcType=VARCHAR}, #{publishYear,jdbcType=INTEGER}, #{publishMonth,jdbcType=INTEGER}, 
-      #{keyWords,jdbcType=VARCHAR}, #{isParseKeyword,jdbcType=VARCHAR})
+    insert into t_reference_copy1 (pre_num, abstract_en, abstract_zh, 
+      doi, bookcode, publish_company, 
+      publish_year, publish_month, key_words, 
+      is_parse_keyword, pre_title)
+    values (#{preNum,jdbcType=INTEGER}, #{abstractEn,jdbcType=VARCHAR}, #{abstractZh,jdbcType=INTEGER}, 
+      #{doi,jdbcType=VARCHAR}, #{bookcode,jdbcType=VARCHAR}, #{publishCompany,jdbcType=VARCHAR}, 
+      #{publishYear,jdbcType=INTEGER}, #{publishMonth,jdbcType=INTEGER}, #{keyWords,jdbcType=VARCHAR}, 
+      #{isParseKeyword,jdbcType=VARCHAR}, #{preTitle,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_reference
+    insert into t_reference_copy1
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="preNum != null">
         pre_num,
-      </if>
-      <if test="preTitle != null">
-        pre_title,
       </if>
       <if test="abstractEn != null">
         abstract_en,
@@ -83,13 +100,13 @@
       <if test="isParseKeyword != null">
         is_parse_keyword,
       </if>
+      <if test="preTitle != null">
+        pre_title,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="preNum != null">
         #{preNum,jdbcType=INTEGER},
-      </if>
-      <if test="preTitle != null">
-        #{preTitle,jdbcType=VARCHAR},
       </if>
       <if test="abstractEn != null">
         #{abstractEn,jdbcType=VARCHAR},
@@ -118,16 +135,16 @@
       <if test="isParseKeyword != null">
         #{isParseKeyword,jdbcType=VARCHAR},
       </if>
+      <if test="preTitle != null">
+        #{preTitle,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
-    update t_reference
+    update t_reference_copy1
     <set>
       <if test="preNum != null">
         pre_num = #{preNum,jdbcType=INTEGER},
-      </if>
-      <if test="preTitle != null">
-        pre_title = #{preTitle,jdbcType=VARCHAR},
       </if>
       <if test="abstractEn != null">
         abstract_en = #{abstractEn,jdbcType=VARCHAR},
@@ -156,13 +173,30 @@
       <if test="isParseKeyword != null">
         is_parse_keyword = #{isParseKeyword,jdbcType=VARCHAR},
       </if>
+      <if test="preTitle != null">
+        pre_title = #{preTitle,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
-    update t_reference
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
+    update t_reference_copy1
     set pre_num = #{preNum,jdbcType=INTEGER},
-      pre_title = #{preTitle,jdbcType=VARCHAR},
+      abstract_en = #{abstractEn,jdbcType=VARCHAR},
+      abstract_zh = #{abstractZh,jdbcType=INTEGER},
+      doi = #{doi,jdbcType=VARCHAR},
+      bookcode = #{bookcode,jdbcType=VARCHAR},
+      publish_company = #{publishCompany,jdbcType=VARCHAR},
+      publish_year = #{publishYear,jdbcType=INTEGER},
+      publish_month = #{publishMonth,jdbcType=INTEGER},
+      key_words = #{keyWords,jdbcType=VARCHAR},
+      is_parse_keyword = #{isParseKeyword,jdbcType=VARCHAR},
+      pre_title = #{preTitle,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.work.demos.mybatis.spider.entity.GeneinfoEntity">
+    update t_reference_copy1
+    set pre_num = #{preNum,jdbcType=INTEGER},
       abstract_en = #{abstractEn,jdbcType=VARCHAR},
       abstract_zh = #{abstractZh,jdbcType=INTEGER},
       doi = #{doi,jdbcType=VARCHAR},
@@ -174,10 +208,12 @@
       is_parse_keyword = #{isParseKeyword,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectMult" parameterType="java.util.List" resultMap="BaseResultMap">
+  <select id="selectMult" parameterType="java.util.List" resultMap="ResultMapWithBLOBs">
     select
     <include refid="Base_Column_List" />
-    from t_reference where 
+    ,
+    <include refid="Blob_Column_List" />
+    from t_reference_copy1 where 
     <choose>
       <when test="list!=null and list.size()>0">
         id in 

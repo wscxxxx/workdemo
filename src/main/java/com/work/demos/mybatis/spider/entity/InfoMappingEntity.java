@@ -4,11 +4,14 @@ import com.bailian.servicetk.core.data.BaseEntity;
 import com.bailian.servicetk.core.data.BaseEntityV2;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.util.Date;
 
 /**
  * t_reference_mapping
  */
+@Data
 @TableName("t_reference_mapping")
 public class InfoMappingEntity extends BaseEntityV2 {
     /**

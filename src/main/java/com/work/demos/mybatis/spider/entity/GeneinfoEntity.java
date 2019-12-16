@@ -3,26 +3,19 @@ package com.work.demos.mybatis.spider.entity;
 import com.bailian.servicetk.core.data.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 /**
- * t_reference
+ * t_reference_copy1
  */
-@TableName("t_reference")
+@Data
+@TableName("t_reference_copy1")
 public class GeneinfoEntity extends BaseEntity {
-
-
-
     /**
      * 文献编号
      */
     @TableField("`pre_num`")
     private Integer preNum;
-
-    /**
-     * 
-     */
-    @TableField("`pre_title`")
-    private String preTitle;
 
     /**
      * 摘要英文
@@ -78,10 +71,15 @@ public class GeneinfoEntity extends BaseEntity {
     @TableField("`is_parse_keyword`")
     private String isParseKeyword;
 
-    public GeneinfoEntity(Integer id, Integer preNum, String preTitle, String abstractEn, Integer abstractZh, String doi, String bookcode, String publishCompany, Integer publishYear, Integer publishMonth, String keyWords, String isParseKeyword) {
+    /**
+     * 
+     */
+    @TableField("`pre_title`")
+    private String preTitle;
+
+    public GeneinfoEntity(Integer id, Integer preNum, String abstractEn, Integer abstractZh, String doi, String bookcode, String publishCompany, Integer publishYear, Integer publishMonth, String keyWords, String isParseKeyword) {
         this.id = id;
         this.preNum = preNum;
-        this.preTitle = preTitle;
         this.abstractEn = abstractEn;
         this.abstractZh = abstractZh;
         this.doi = doi;
@@ -91,6 +89,21 @@ public class GeneinfoEntity extends BaseEntity {
         this.publishMonth = publishMonth;
         this.keyWords = keyWords;
         this.isParseKeyword = isParseKeyword;
+    }
+
+    public GeneinfoEntity(Integer id, Integer preNum, String abstractEn, Integer abstractZh, String doi, String bookcode, String publishCompany, Integer publishYear, Integer publishMonth, String keyWords, String isParseKeyword, String preTitle) {
+        this.id = id;
+        this.preNum = preNum;
+        this.abstractEn = abstractEn;
+        this.abstractZh = abstractZh;
+        this.doi = doi;
+        this.bookcode = bookcode;
+        this.publishCompany = publishCompany;
+        this.publishYear = publishYear;
+        this.publishMonth = publishMonth;
+        this.keyWords = keyWords;
+        this.isParseKeyword = isParseKeyword;
+        this.preTitle = preTitle;
     }
 
     public GeneinfoEntity() {
@@ -111,22 +124,6 @@ public class GeneinfoEntity extends BaseEntity {
      */
     public void setPreNum(Integer preNum) {
         this.preNum = preNum;
-    }
-
-    /**
-     * 
-     * @return pre_title 
-     */
-    public String getPreTitle() {
-        return preTitle;
-    }
-
-    /**
-     * 
-     * @param preTitle 
-     */
-    public void setPreTitle(String preTitle) {
-        this.preTitle = preTitle == null ? null : preTitle.trim();
     }
 
     /**
@@ -271,5 +268,21 @@ public class GeneinfoEntity extends BaseEntity {
      */
     public void setIsParseKeyword(String isParseKeyword) {
         this.isParseKeyword = isParseKeyword == null ? null : isParseKeyword.trim();
+    }
+
+    /**
+     * 
+     * @return pre_title 
+     */
+    public String getPreTitle() {
+        return preTitle;
+    }
+
+    /**
+     * 
+     * @param preTitle 
+     */
+    public void setPreTitle(String preTitle) {
+        this.preTitle = preTitle == null ? null : preTitle.trim();
     }
 }

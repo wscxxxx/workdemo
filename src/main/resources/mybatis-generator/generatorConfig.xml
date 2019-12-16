@@ -75,7 +75,7 @@
 <!--            <property name="rootClass" value="com.baomidou.mybatisplus.core.mapper.BaseMapper"/>-->
         </javaClientGenerator>
 
-        <table schema="mailuo_sd" tableName="t_reference" domainObjectName="GeneinfoEntity"
+        <table schema="mailuo_sd" tableName="t_reference_copy1" domainObjectName="GeneinfoEntity"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
@@ -90,13 +90,13 @@
                <!--selectByExampleQueryId="false">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
-        <table schema="mailuo_sd" tableName="t_reference_company" domainObjectName="InfoCompanyEntity"
+        <table schema="mailuo_sd" tableName="t_reference_company_copy1" domainObjectName="InfoCompanyEntity"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table schema="mailuo_sd" tableName="t_reference_author" domainObjectName="InfoAuthorEntity"
+        <table schema="mailuo_sd" tableName="t_reference_author_copy1" domainObjectName="InfoAuthorEntity"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">

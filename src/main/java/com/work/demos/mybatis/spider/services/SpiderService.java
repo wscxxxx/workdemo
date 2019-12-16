@@ -9,4 +9,5 @@ public interface SpiderService {
      void getlast( );
      void domain(int page);
      void savetosql(int page );
+     void saveothers();
 }

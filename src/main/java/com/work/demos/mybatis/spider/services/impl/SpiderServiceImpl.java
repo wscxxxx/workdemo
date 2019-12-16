@@ -23,8 +23,8 @@ private Log log =LogFactory.getLog(SpiderServiceImpl.class);
     @Override
     public String getall() {
 
-        GeneinfoEntity geneinfoEntity=mapper.getone();
-        return geneinfoEntity.getAbstractEn();
+         mapper.testmutationdownland();
+        return "";
     }
 
     @Override
@@ -41,39 +41,47 @@ private Log log =LogFactory.getLog(SpiderServiceImpl.class);
     @Override
     public void savetosql(int page   ) {
         int flag=1;
-          Mapptmp res=new Mapptmp();
-        for (int i=page;i<2626;i++){
+        Mapptmp res2=new Mapptmp();
 
+        for (int i=page;i<16316;i++){
 
             int end=0;
-            if (page+5<2626){
-                end=page+5;
-            }
+//            if (page+20>=2626){
+//                page=page-20;
+//                end=2626-page;
+//                flag=20;
+//            }
             flag++;
 //            else {
 //                end=2626;
 //            }
+            if (flag==10){
 
-            if (flag==5){
-                Mapptmp res2=new Mapptmp();
-                log.info("--------------------------------------------------");
+                log.info("--------------------------------------------------"+end);
                 log.info("第"+page+"页到第"+(page+10)+"页");
-                log.info(res );
+                log.info(res2 );
 
-                if (res.getAut_id()==0){
-                    res= mapper.mutationdownland(  page ,end,null );
+                if (res2==null||res2.getAut_id()==0){
+                    end=10;
+                    res2= mapper.mutationdownland(  page ,end,null );
 
                 }else {
-                    res= mapper.mutationdownland(  page ,end,res );
+                    res2= mapper.mutationdownland(  page ,end,res2 );
 
                 }
 
 
-                page=page+5;
+                page=page+10;
                 flag=1;
 
             }
         }
 
+    }
+
+    @Override
+    public void saveothers() {
+        Mapptmp res2=null;
+        mapper.addothers(res2);
     }
 }

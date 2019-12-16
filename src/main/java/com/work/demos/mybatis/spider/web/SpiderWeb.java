@@ -29,7 +29,13 @@ public class SpiderWeb {
 
         return new Result(ResultConstant.SUCCESS_STATUE,"" );
     }
+    @RequestMapping(value = "/saveothers", method = RequestMethod.GET)
+    public Result saveothers(@RequestParam int page )  {
 
+        service.saveothers( );
+
+        return new Result(ResultConstant.SUCCESS_STATUE,"" );
+    }
     @RequestMapping(value = "/dowland", method = RequestMethod.GET)
     public void dowland(@RequestParam int page)  {
         System.out.println(page);
@@ -40,9 +46,9 @@ public class SpiderWeb {
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public Result test(@RequestParam int page)  {
 
-        service.getlast();
+       ;
 
-        return new Result(ResultConstant.SUCCESS_STATUE,"" );
+        return new Result(ResultConstant.SUCCESS_STATUE,"", service.getall() );
     }
 
 }

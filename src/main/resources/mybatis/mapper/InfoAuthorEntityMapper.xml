@@ -4,34 +4,44 @@
   <resultMap id="BaseResultMap" type="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="name" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id, name
+    id
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <sql id="Blob_Column_List">
+    name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
-    from t_reference_author
+    ,
+    <include refid="Blob_Column_List" />
+    from t_reference_author_copy1
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from t_reference_author
+    delete from t_reference_author_copy1
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_reference_author (name)
-    values (#{name,jdbcType=VARCHAR})
+    insert into t_reference_author_copy1 (name)
+    values (#{name,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_reference_author
+    insert into t_reference_author_copy1
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="name != null">
         name,
@@ -39,28 +49,30 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="name != null">
-        #{name,jdbcType=VARCHAR},
+        #{name,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
-    update t_reference_author
+    update t_reference_author_copy1
     <set>
       <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
+        name = #{name,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
-    update t_reference_author
-    set name = #{name,jdbcType=VARCHAR}
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
+    update t_reference_author_copy1
+    set name = #{name,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectMult" parameterType="java.util.List" resultMap="BaseResultMap">
+  <select id="selectMult" parameterType="java.util.List" resultMap="ResultMapWithBLOBs">
     select
     <include refid="Base_Column_List" />
-    from t_reference_author where 
+    ,
+    <include refid="Blob_Column_List" />
+    from t_reference_author_copy1 where 
     <choose>
       <when test="list!=null and list.size()>0">
         id in 
