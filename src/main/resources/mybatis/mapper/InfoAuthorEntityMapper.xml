@@ -4,16 +4,18 @@
   <resultMap id="BaseResultMap" type="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="is_write_es" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="is_write_es" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="name" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List">
-    id
+    id, is_write_es
   </sql>
   <sql id="Blob_Column_List">
     name
@@ -23,39 +25,48 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from t_reference_author_copy1
+    from t_reference_author
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from t_reference_author_copy1
+    delete from t_reference_author
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_reference_author_copy1 (name)
-    values (#{name,jdbcType=LONGVARCHAR})
+    insert into t_reference_author (is_write_es, name)
+    values (#{isWriteEs,jdbcType=VARCHAR}, #{name,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_reference_author_copy1
+    insert into t_reference_author
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="isWriteEs != null">
+        is_write_es,
+      </if>
       <if test="name != null">
         name,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="isWriteEs != null">
+        #{isWriteEs,jdbcType=VARCHAR},
+      </if>
       <if test="name != null">
         #{name,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
-    update t_reference_author_copy1
+    update t_reference_author
     <set>
+      <if test="isWriteEs != null">
+        is_write_es = #{isWriteEs,jdbcType=VARCHAR},
+      </if>
       <if test="name != null">
         name = #{name,jdbcType=LONGVARCHAR},
       </if>
@@ -63,8 +74,14 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
-    update t_reference_author_copy1
-    set name = #{name,jdbcType=LONGVARCHAR}
+    update t_reference_author
+    set is_write_es = #{isWriteEs,jdbcType=VARCHAR},
+      name = #{name,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
+    update t_reference_author
+    set is_write_es = #{isWriteEs,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectMult" parameterType="java.util.List" resultMap="ResultMapWithBLOBs">
@@ -72,7 +89,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from t_reference_author_copy1 where 
+    from t_reference_author where 
     <choose>
       <when test="list!=null and list.size()>0">
         id in 

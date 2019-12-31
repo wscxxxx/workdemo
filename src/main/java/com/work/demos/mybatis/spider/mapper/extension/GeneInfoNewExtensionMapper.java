@@ -6,6 +6,7 @@ import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public interface GeneInfoNewExtensionMapper extends GeneinfoEntityMapper {
@@ -20,6 +21,7 @@ public interface GeneInfoNewExtensionMapper extends GeneinfoEntityMapper {
     int authoradd(List<InfoAuthorEntity> entities);
     int companyadd(List<InfoCompanyEntity> entities);
     int mappingadd(List<InfoMappingEntity> entities);
+    List<InfoAuthorEntity> getbypage(Map<String,Object> page);
 
 
 

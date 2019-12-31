@@ -1,7 +1,6 @@
 package com.work.demos.mybatis.spider.services.impl;
 
 import com.work.demos.mybatis.generef.web.Mapptmp;
-import com.work.demos.mybatis.spider.entity.GeneinfoEntity;
 import com.work.demos.mybatis.spider.services.SpiderService;
 import com.work.demos.mybatis.spider.repository.SpiderRepository;
 import com.work.demos.utils.Workers;
@@ -33,9 +32,9 @@ private Log log =LogFactory.getLog(SpiderServiceImpl.class);
     }
 
     @Override
-    public void domain( int page) {
+    public void domain( int page,String gene) {
         Workers workers=new Workers();
-        workers.dowlandweb(page);
+        workers.dowlandweb(page,gene);
     }
 
     @Override
@@ -43,7 +42,7 @@ private Log log =LogFactory.getLog(SpiderServiceImpl.class);
         int flag=1;
         Mapptmp res2=new Mapptmp();
 
-        for (int i=page;i<16316;i++){
+        for (int i=page;i<3341;i++){
 
             int end=0;
 //            if (page+20>=2626){
@@ -83,5 +82,10 @@ private Log log =LogFactory.getLog(SpiderServiceImpl.class);
     public void saveothers() {
         Mapptmp res2=null;
         mapper.addothers(res2);
+    }
+
+    @Override
+    public int update_mapping() {
+       return mapper.update_map(1);
     }
 }

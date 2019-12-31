@@ -33,7 +33,7 @@
 
         <!-- 数据库连接 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://39.96.194.226:3306/mailuo_sd?useSSL=false&amp;charset='UTF8'&amp;allowPublicKeyRetrieval=true"
+                        connectionURL="jdbc:mysql://47.95.218.254:3306/mailuo_sd?useSSL=false&amp;charset='UTF8'&amp;allowPublicKeyRetrieval=true"
                         userId="mailuo"
                         password="xb_PXR9jL_x=">
             <property name="useInformationSchema" value="true" />
@@ -58,7 +58,7 @@
                 注意：如果在key class或者record class中有root class相同的属性，MBG就不会重新生成这些属性了，包括：
                     1，属性名相同，类型相同，有相同的getter/setter方法；
              -->
-            <property name="rootClass" value="com.bailian.servicetk.core.data.BaseEntity"/>
+            <property name="rootClass" value="com.bailian.servicetk.core.data.BaseEntityV2"/>
         </javaModelGenerator>
 
         <!-- sql mapper 映射配置文件 -->
@@ -75,33 +75,33 @@
 <!--            <property name="rootClass" value="com.baomidou.mybatisplus.core.mapper.BaseMapper"/>-->
         </javaClientGenerator>
 
-        <table schema="mailuo_sd" tableName="t_reference_copy1" domainObjectName="GeneinfoEntity"
+        <!--<table schema="mailuo_sd" tableName="t_reference" domainObjectName="GeneinfoEntity"-->
+               <!--enableCountByExample="false" enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false" enableSelectByExample="false"-->
+               <!--selectByExampleQueryId="false">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+            <!--<columnOverride column="abstract_en" jdbcType="VARCHAR" />-->
+            <!--<columnOverride column="key_words" jdbcType="VARCHAR" />-->
+        <!--</table>-->
+        <!--单独生成mapping表-->
+        <table schema="mailuo_sd" tableName="t_reference_mapping" domainObjectName="InfoMappingEntity"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-            <columnOverride column="abstract_en" jdbcType="VARCHAR" />
-            <columnOverride column="key_words" jdbcType="VARCHAR" />
         </table>
-        <!--单独生成mapping表-->
-        <!--<table schema="mailuo_sd" tableName="t_reference_mapping" domainObjectName="InfoMappingEntity"-->
+        <!--<table schema="mailuo_sd" tableName="t_reference_company_copy1" domainObjectName="InfoCompanyEntity"-->
                <!--enableCountByExample="false" enableUpdateByExample="false"-->
                <!--enableDeleteByExample="false" enableSelectByExample="false"-->
                <!--selectByExampleQueryId="false">-->
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
         <!--</table>-->
-        <table schema="mailuo_sd" tableName="t_reference_company_copy1" domainObjectName="InfoCompanyEntity"
-               enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table schema="mailuo_sd" tableName="t_reference_author_copy1" domainObjectName="InfoAuthorEntity"
-               enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        <!--<table schema="mailuo_sd" tableName="t_reference_author" domainObjectName="InfoAuthorEntity"-->
+               <!--enableCountByExample="false" enableUpdateByExample="false"-->
+               <!--enableDeleteByExample="false" enableSelectByExample="false"-->
+               <!--selectByExampleQueryId="false">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
         <!--<table schema="mailuo" tableName="t_wsc" domainObjectName="WscEntity"-->
                <!--enableCountByExample="false" enableUpdateByExample="false"-->
                <!--enableDeleteByExample="false" enableSelectByExample="false"-->

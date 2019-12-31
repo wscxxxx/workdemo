@@ -6,7 +6,9 @@ import com.work.demos.mybatis.generef.util.FileReader;
 import com.work.demos.mybatis.generef.util.Tmp_aut;
 import com.work.demos.mybatis.generef.web.Mapptmp;
 import com.work.demos.mybatis.spider.entity.*;
+import com.work.demos.mybatis.spider.mapper.InfoAuthorEntityMapper;
 import com.work.demos.mybatis.spider.mapper.extension.GeneInfoNewExtensionMapper;
+import com.work.demos.mybatis.spider.mapper.extension.InfoAuthorExtensionMapper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,12 +20,14 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 @Component
-public class SpiderRepository extends BaseRepository   implements ISpiderRepository{
+public class SpiderRepository extends BaseRepository implements ISpiderRepository {
 
     private GeneInfoNewExtensionMapper mapper;
     private static final Log log = LogFactory.getLog(SpiderRepository.class);
@@ -32,10 +36,12 @@ public class SpiderRepository extends BaseRepository   implements ISpiderReposit
 
 
 
-    private  volatile  static Integer au_id=-1;
 
-    private   volatile static Integer com_id=-1;
-     private  static List<InfoAuthorEntity> authorEntityList = new CopyOnWriteArrayList<>();
+
+    private volatile static Integer au_id = -1;
+
+    private volatile static Integer com_id = -1;
+    private static List<InfoAuthorEntity> authorEntityList = new CopyOnWriteArrayList<>();
     private static List<InfoCompanyEntity> companyEntityList = new CopyOnWriteArrayList<>();
     private static List<GeneinfoEntity> infoEntities = new CopyOnWriteArrayList<>();
     private static List<InfoMappingEntity> mappingEntityList = new CopyOnWriteArrayList<>();
@@ -46,151 +52,149 @@ public class SpiderRepository extends BaseRepository   implements ISpiderReposit
     }
 
 
-    private synchronized Integer au_idadd(){
+    private synchronized Integer au_idadd() {
 
-        SpiderRepository. au_id++;
-        return SpiderRepository.au_id-1;
-    }private synchronized Integer com_idadd(){
-        SpiderRepository.com_id++;
-        return SpiderRepository.com_id-1;
+        SpiderRepository.au_id++;
+        return SpiderRepository.au_id - 1;
     }
-     @Override
-    public Mapptmp mutationdownland(int start,int end,Mapptmp flag) {
+
+    private synchronized Integer com_idadd() {
+        SpiderRepository.com_id++;
+        return SpiderRepository.com_id - 1;
+    }
+
+    @Override
+    public Mapptmp mutationdownland(int start, int end, Mapptmp flag) {
         log.info(flag);
 
-         if (flag!=null){
+        if (flag != null) {
 
-              au_id=flag.getAut_id();
-              com_id=flag.getCom_id();
+            au_id = flag.getAut_id();
+            com_id = flag.getCom_id();
 
-             log.info(au_id + "哈哈" + com_id );
-         }else if (flag==null){
+            log.info(au_id + "哈哈" + com_id);
+        } else if (flag == null) {
 
+            SpiderRepository.au_id = mapper.getauthorlast();
 
-
-
-             SpiderRepository.au_id = mapper.getauthorlast();
-
-             SpiderRepository.com_id = mapper.getcompanylast();
+            SpiderRepository.com_id = mapper.getcompanylast();
 
 
-             if ( SpiderRepository.au_id == null || SpiderRepository.com_id == null ) {
+            if (SpiderRepository.au_id == null || SpiderRepository.com_id == null) {
 
 
+                SpiderRepository.au_id = 1;
+                SpiderRepository.com_id = 1;
 
-                 SpiderRepository.au_id =  1;
-                 SpiderRepository.com_id = 1;
+            } else {
 
-             }else {
+                au_idadd();
+                com_idadd();
 
-                 au_idadd();
-                 com_idadd();
-
-             }
-         }
-
-         log.info(au_id + "哈哈" + com_id+"gene_id" );
-         ExecutorService threadPool = Executors.newFixedThreadPool(10);
-         CompletionService<Boolean> cs = new ExecutorCompletionService<Boolean>(threadPool);
-         for(int i=0 ;i<10;i++) {
-            int index=i;
-             cs.submit(new Callable<Boolean>() {
-                 public Boolean call() throws Exception {
-
-                     //TODO
-                     log.info("--------------"+index);
-                     Boolean xxx= setdata(start+index );
-//                     boolean xxx=true;
-
-                     return xxx;
-                 }
-             });
-         }
-         threadPool.shutdown();
-
-         // TODO
-
-         List< Boolean > result=new ArrayList<>();
-
-         for(int i =0 ; i<10;i++) {
-
-             try {
-                 Boolean res=cs.take().get();
-//                if (cs.take().get()!=null)
-                 result.add(res);
-
-             } catch (InterruptedException e) {
-                 e.printStackTrace();
-             } catch (Exception e) {
-                 e.printStackTrace();
-             }
-         }
-         System.out.println("主线程：\n"+result.size());
-
-
-
-
-
-
-
-         log.info("文献"+infoEntities.size());
-         log.info("总共"+mappingEntityList.size());
-         log.info("作者"+authorEntityList.size());
-         log.info("机构"+companyEntityList.size());
-
-        Mapptmp results=new Mapptmp();
-        if (infoEntities.size()==0){
-
-            return null;
+            }
         }
 
-//         log.info(au_id + "哈哈" + com_id+"gene_id"+gene_id+"map_id"+map_id);
-         int a_r=1;
-         int c_r=1;
-            if (authorEntityList.size()!=0){
-                 a_r= mapper.authoradd(authorEntityList);
-                 if (companyEntityList.size()!=0)
-                 c_r=mapper.companyadd(companyEntityList);
+        log.info(au_id + "哈哈" + com_id + "gene_id");
+        ExecutorService threadPool = Executors.newFixedThreadPool(20);
+        CompletionService<Boolean> cs = new ExecutorCompletionService<Boolean>(threadPool);
+        for (int i = 0; i < 10; i++) {
+            int index = i;
+            cs.submit(new Callable<Boolean>() {
+                public Boolean call() throws Exception {
+
+                    //TODO
+                    log.info("--------------" + index);
+                    Boolean xxx = setdata(start + index);
+//                     boolean xxx=true;
+
+                    return xxx;
+                }
+            });
+        }
+        threadPool.shutdown();
+
+        // TODO
+
+        List<Boolean> result = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+
+            try {
+                Boolean res = cs.take().get();
+//                if (cs.take().get()!=null)
+                result.add(res);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        }
+        System.out.println("主线程：\n" + result.size());
 
-         int g_r=mapper.geneadd(infoEntities);
-         int m_r=mapper.mappingadd(mappingEntityList);
-         log.info(g_r+"\n"+a_r+"\n"+c_r+"\n"+m_r);
+        log.info("文献" + infoEntities.size());
+        log.info("总共" + mappingEntityList.size());
+        log.info("作者" + authorEntityList.size());
+        log.info("机构" + companyEntityList.size());
 
-        results.setAut_id(au_id );
-         results.setCom_id(com_id );
-
-         log.info("当前："+results );
-         try {
-             Thread.sleep(5*1000);
-         } catch (InterruptedException e) {
-             e.printStackTrace();
-         }
-         infoEntities.clear();
-         authorEntityList.clear();
-         companyEntityList.clear();
-         mappingEntityList.clear();
+        Mapptmp results = new Mapptmp();
+        results.setAut_id(au_id);
+        results.setCom_id(com_id);
 
 
-         try {
-             Thread.sleep(2*1000);
-         } catch (InterruptedException e) {
-             e.printStackTrace();
-         }
-         return results;
+        if (infoEntities.size() == 0) {
+            log.info("当前：" + results);
+            return null;
+        }
+//         log.info(au_id + "哈哈" + com_id+"gene_id"+gene_id+"map_id"+map_id);
+        int a_r = 1;
+        int c_r = 1;
+        if (authorEntityList.size() != 0) {
+            a_r = mapper.authoradd(authorEntityList);
+            if (companyEntityList.size() != 0)
+                c_r = mapper.companyadd(companyEntityList);
+        }
+        Set<GeneinfoEntity> geneSet = new HashSet<>(infoEntities);
+        infoEntities = new ArrayList<>(geneSet);
+
+        int g_r = mapper.geneadd(infoEntities);
+        int m_r = mapper.mappingadd(mappingEntityList);
+        log.info(g_r + "\n" + a_r + "\n" + c_r + "\n" + m_r);
+
+
+
+        log.info("当前：" + results);
+        try {
+            Thread.sleep(5 * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        infoEntities.clear();
+        authorEntityList.clear();
+        companyEntityList.clear();
+        mappingEntityList.clear();
+
+
+
+        try {
+            Thread.sleep(2 * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return results;
     }
 
-    private Boolean setdata( int page){
-        log.info("我是第"+page+"页");
+    private Boolean setdata(int page) {
+        log.info("我是第" + page + "页");
 
         List<InfoAuthorEntity> tauthorEntityList = new CopyOnWriteArrayList<>();
-          List<InfoCompanyEntity> tcompanyEntityList = new CopyOnWriteArrayList<>();
-          List<GeneinfoEntity> tinfoEntities = new CopyOnWriteArrayList<>();
-          List<InfoMappingEntity> tmappingEntityList = new CopyOnWriteArrayList<>();
-        FileReader fileRer=new FileReader();
-        String result="";
+        List<InfoCompanyEntity> tcompanyEntityList = new CopyOnWriteArrayList<>();
+        List<GeneinfoEntity> tinfoEntities = new CopyOnWriteArrayList<>();
+        List<InfoMappingEntity> tmappingEntityList = new CopyOnWriteArrayList<>();
+        FileReader fileRer = new FileReader();
+        String result = "";
 
-        result =fileRer.readFileByChars("/media/wangshichen/文件/webs/tumor/第"+page+"页");
+        result = fileRer.readFileByChars("/media/wangshichen/文件/webs/biomarker/第" + page + "页");
 
         //TODO
         Document jsoup = Jsoup.parse(result);
@@ -218,44 +222,43 @@ public class SpiderRepository extends BaseRepository   implements ISpiderReposit
                 publishmonth = publish.split("[;]")[0].split("[.]")[1].split(" ")[2];
 
             }
-            String bookcode = publish.split("[;]")[1].split("[.]")[0];
-            String doi=element.select("dl[class=rprtid]").select("dd").select("a") .text();
+            String bookcode = "";
+            if (!(publish.split("[;]").length < 2)) {
+                bookcode = publish.split("[;]")[1].split("[.]")[0];
+            }
+            String doi = element.select("dl[class=rprtid]").select("dd").select("a").text();
 
             alls = getauthor(element);
-            String author = element.select("div[class=auths]").text();
-            String company = element.select("div[class=afflist]").select("dd").text();
+
             String prenum = element.select("div[class=aux]").select("dl[class=rprtid]").select("dd").get(0).text();
             log.info("\n所有信息" + alls);
 
 
             String abstr = element.select("div[class=abstr]").select("p").text();
             String keywords = element.select("div[class=keywords]").select("p").text();
-//            log.info("\n编号：" + prenum + "\n标题：" + title + "\n发布信息公司：" + publishcom + "\n年：" + publishtime
-//                    + "\n发布月：" + publishmonth + "\n书号：" + bookcode + "\ndoi：" + doi + "\n作者：" + author + "\n" + "机构：" + company +
-//                    "\n摘要：" + abstr + "\n关键字：" + keywords);
-            GeneinfoEntity entity=mapper.geneidlist(Integer.parseInt(prenum));
 
-            if (entity!=null){
-                log.info(entity.getPreTitle()+"已经有了------------------------");
-                log.info(au_id + "哈哈" + com_id+"gene_id" );
+            GeneinfoEntity entity = mapper.geneidlist(Integer.parseInt(prenum));
+
+            if (entity != null) {
+                log.info("\n------------------------"+entity.getPreTitle() + "已经有了");
+                log.info(au_id + "哈哈" + com_id + "gene_id");
 
 
-                File file2 = new File("/media/wangshichen/文件/webs/tumor/第"+page+"页");
+                File file2 = new File("/media/wangshichen/文件/webs/biomarker/第" + page + "页");
                 if (file2.exists()) {
-                    file2.delete();
+//                    file2.delete();
                 }
+
                 continue;
             }
             for (Tmp_aut tmp_aut : alls) {
                 InfoAuthorEntity authorEntity = new InfoAuthorEntity();
 //                InfoAuthorEntity aut=mapper. findautbyname( tmp_aut.getAuthor());
-                int au_id_tm=au_idadd();
+                int au_id_tm = au_idadd();
                 authorEntity.setId(au_id_tm);
                 authorEntity.setName(tmp_aut.getAuthor());
-                log.info(authorEntity.getId()+"---------------+"+au_id_tm+"+++++++++++++++++++++++"+authorEntity.getName());
+//                log.info(authorEntity.getId() + "---------------" + au_id_tm + "+++++++++++++++++++++++" + authorEntity.getName());
                 tauthorEntityList.add(authorEntity);
-
-
 
 
                 if (tmp_aut.getCompanys() == null) {
@@ -265,16 +268,16 @@ public class SpiderRepository extends BaseRepository   implements ISpiderReposit
                     companyEntity.setCompany(null);
                     companyEntity.setId(null);
                     mappingEntity.setCompanyId(0);
-                    mappingEntity.setAuthorId(au_id_tm);
+                    mappingEntity.setAuthor(tmp_aut.getAuthor());
                     mappingEntity.setProNum(Integer.valueOf(prenum));
                     tmappingEntityList.add(mappingEntity);
                 } else {
                     for (String rel_company : tmp_aut.getCompanys()) {
 
-                        int com_id_tm=com_idadd();
+                        int com_id_tm = com_idadd();
                         InfoCompanyEntity companyEntity = new InfoCompanyEntity();
                         InfoMappingEntity mappingEntity = new InfoMappingEntity();
-                        mappingEntity.setAuthorId(au_id_tm);
+                        mappingEntity.setAuthor(tmp_aut.getAuthor());
 
                         mappingEntity.setProNum(Integer.valueOf(prenum));
                         mappingEntity.setCompanyId(com_id_tm);
@@ -290,15 +293,12 @@ public class SpiderRepository extends BaseRepository   implements ISpiderReposit
                         tcompanyEntityList.add(companyEntity);
 
 
-
-
                     }
                 }
 //                if (aut!=null){
 ////                    log.info("已有，跳过");
 //                    continue;
 //                }
-
 
 
             }
@@ -311,7 +311,7 @@ public class SpiderRepository extends BaseRepository   implements ISpiderReposit
                 infoEntity.setPublishYear(Integer.valueOf(publishtime));
                 infoEntity.setPublishMonth(getdata(publishmonth));
 
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 infoEntity.setPublishYear(getdata(publishmonth));
 
             }
@@ -322,14 +322,14 @@ public class SpiderRepository extends BaseRepository   implements ISpiderReposit
             log.info(infoEntity.toString());
             tinfoEntities.add(infoEntity);
 
-            log.info("====================="+infoEntities.size());
+            log.info("=====================" + infoEntities.size());
         }
 
-            File file = new File("/media/wangshichen/文件/webs/tumor/第"+page+"页");
-            if (file.exists()) {
-                log.info("删除文件");
-                file.delete();
-            }
+        File file = new File("/media/wangshichen/文件/webs/biomarker/第" + page + "页");
+        if (file.exists()) {
+            log.info("删除文件");
+//            file.delete();
+        }
 
 
         infoEntities.addAll(tinfoEntities);
@@ -337,7 +337,7 @@ public class SpiderRepository extends BaseRepository   implements ISpiderReposit
         companyEntityList.addAll(tcompanyEntityList);
         mappingEntityList.addAll(tmappingEntityList);
 
-return true;
+        return true;
     }
 
     private List<Tmp_aut> getauthor(Element alls) {
@@ -367,7 +367,7 @@ return true;
                 if (flag == 1) {
                     continue;
                 }
-                if (cnums.size()==0){
+                if (cnums.size() == 0) {
                     company_t.add(null);
                     continue;
                 }
@@ -392,6 +392,7 @@ return true;
 
         return result;
     }
+
     private int getdata(String data) {
         int res = 0;
         switch (data) {
@@ -425,48 +426,49 @@ return true;
         }
         return res;
     }
+
     @Override
-    public Mapptmp testmutationdownland( ) {
+    public Mapptmp testmutationdownland() {
         au_id = mapper.getauthorlast();
         com_id = mapper.getcompanylast();
 //        InfoAuthorEntity aut=mapper. findautbyname( "McLaugxhlin KA");
-        log.info(au_id + "哈哈" + com_id+"gene_id" );
-         return null;
+        log.info(au_id + "哈哈" + com_id + "gene_id");
+        return null;
     }
 
     @Override
     public Mapptmp addothers(Mapptmp flag) {
-        if (flag!=null){
-            au_id=flag.getAut_id();
-            com_id=flag.getCom_id();
-            log.info(au_id + "哈哈" + com_id );
-        }else if (flag==null){
+        if (flag != null) {
+            au_id = flag.getAut_id();
+            com_id = flag.getCom_id();
+            log.info(au_id + "哈哈" + com_id);
+        } else if (flag == null) {
             SpiderRepository.au_id = mapper.getauthorlast();
             SpiderRepository.com_id = mapper.getcompanylast();
-            if ( SpiderRepository.au_id == null || SpiderRepository.com_id == null ) {
-                SpiderRepository.au_id =  1;
+            if (SpiderRepository.au_id == null || SpiderRepository.com_id == null) {
+                SpiderRepository.au_id = 1;
                 SpiderRepository.com_id = 1;
-            }else {
+            } else {
                 au_idadd();
                 com_idadd();
             }
         }
-        log.info(au_id + "哈哈" + com_id+"gene_id" );
+        log.info(au_id + "哈哈" + com_id + "gene_id");
 
-        String basePath="/media/wangshichen/文件/webs/";
-        String[] list=new File(basePath).list();
+        String basePath = "/media/wangshichen/文件/webs/";
+        String[] list = new File(basePath).list();
 
         ExecutorService threadPool = Executors.newFixedThreadPool(10);
         CompletionService<Boolean> cs = new ExecutorCompletionService<Boolean>(threadPool);
-        for (int i=3;i<list.length;i++){
-            int index=i;
+        for (int i = 3; i < list.length; i++) {
+            int index = i;
             cs.submit(new Callable<Boolean>() {
                 public Boolean call() throws Exception {
 
                     //TODO
-                    log.info("--------------"+index);
+                    log.info("--------------" + index);
                     setdatas(list[index]);
-                     boolean xxx=true;
+                    boolean xxx = true;
 
                     return xxx;
                 }
@@ -476,12 +478,12 @@ return true;
 
         // TODO
 
-        List< Boolean > result=new ArrayList<>();
+        List<Boolean> result = new ArrayList<>();
 
-        for(int i =3 ; i<list.length;i++) {
+        for (int i = 3; i < list.length; i++) {
 
             try {
-                Boolean res=cs.take().get();
+                Boolean res = cs.take().get();
 //                if (cs.take().get()!=null)
                 result.add(res);
 
@@ -491,38 +493,39 @@ return true;
                 e.printStackTrace();
             }
         }
-        System.out.println("主线程：\n"+result.size());
-        log.info("文献"+infoEntities.size());
-        log.info("总共"+mappingEntityList.size());
-        log.info("作者"+authorEntityList.size());
-        log.info("机构"+companyEntityList.size());
+        System.out.println("主线程：\n" + result.size());
+        log.info("文献" + infoEntities.size());
+        log.info("总共" + mappingEntityList.size());
+        log.info("作者" + authorEntityList.size());
+        log.info("机构" + companyEntityList.size());
 
-        Mapptmp results=new Mapptmp();
-        if (infoEntities.size()==0){
+        Mapptmp results = new Mapptmp();
+        if (infoEntities.size() == 0) {
 
             return null;
         }
 
 
 //         log.info(au_id + "哈哈" + com_id+"gene_id"+gene_id+"map_id"+map_id);
-        int a_r=1;
-        int c_r=1;
-        if (authorEntityList.size()!=0){
-            a_r= mapper.authoradd(authorEntityList);
-            if (companyEntityList.size()!=0)
-                c_r=mapper.companyadd(companyEntityList);
+        int a_r = 1;
+        int c_r = 1;
+        if (authorEntityList.size() != 0) {
+            a_r = mapper.authoradd(authorEntityList);
+            if (companyEntityList.size() != 0)
+                c_r = mapper.companyadd(companyEntityList);
         }
 
-        int g_r=mapper.geneadd(infoEntities);
-        int m_r=mapper.mappingadd(mappingEntityList);
-        log.info(g_r+"\n"+a_r+"\n"+c_r+"\n"+m_r);
+        int g_r = mapper.geneadd(infoEntities);
+        int m_r = mapper.mappingadd(mappingEntityList);
+        log.info(g_r + "\n" + a_r + "\n" + c_r + "\n" + m_r);
 
-        results.setAut_id(au_id );
-        results.setCom_id(com_id );
+        results.setAut_id(au_id);
+        results.setCom_id(com_id);
 
 
-        try {  log.info("当前："+results );
-            Thread.sleep(5*1000);
+        try {
+            log.info("当前：" + results);
+            Thread.sleep(5 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -531,29 +534,30 @@ return true;
         companyEntityList.clear();
         mappingEntityList.clear();
         try {
-            Thread.sleep(2*1000);
+            Thread.sleep(2 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         return results;
     }
-    private Boolean setdatas( String filename){
-        log.info("我是 "+filename+"");
+
+    private Boolean setdatas(String filename) {
+        log.info("我是 " + filename + "");
 
         List<InfoAuthorEntity> tauthorEntityList = new CopyOnWriteArrayList<>();
         List<InfoCompanyEntity> tcompanyEntityList = new CopyOnWriteArrayList<>();
         List<GeneinfoEntity> tinfoEntities = new CopyOnWriteArrayList<>();
         List<InfoMappingEntity> tmappingEntityList = new CopyOnWriteArrayList<>();
-        FileReader fileRer=new FileReader();
-        String result="";
+        FileReader fileRer = new FileReader();
+        String result = "";
 
-        result =fileRer.readFileByChars("/media/wangshichen/文件/webs/"+filename);
+        result = fileRer.readFileByChars("/media/wangshichen/文件/webs/" + filename);
 
         //TODO
         Document jsoup = Jsoup.parse(result);
 
-        log.info("-----"+jsoup.select("h3[class=result_count left]").text());
+        log.info("-----" + jsoup.select("h3[class=result_count left]").text());
         Elements elements = jsoup.select("div[class=rprt abstract]");
         log.info(elements.size());
 
@@ -565,16 +569,16 @@ return true;
             log.info("-----------------------------------");
 
             int code = ++a;
-            log.info( "第" + code + "个");
+            log.info("第" + code + "个");
 
             String title = element.select("h1").text();
             String publish = element.select("div[class=cit]").text();
             String publishcom = publish.split("[.]")[0];
-            String publishtime ="";
-            if (!publish.split("[;]")[0].split("[.]")[1].equals(")")){
-                publishtime=publish.split("[;]")[0].split("[.]")[1].split(" ")[1];
-            }else {
-                publishtime=publish.split("[;]")[0].split("[.]")[2].split(" ")[1];
+            String publishtime = "";
+            if (!publish.split("[;]")[0].split("[.]")[1].equals(")")) {
+                publishtime = publish.split("[;]")[0].split("[.]")[1].split(" ")[1];
+            } else {
+                publishtime = publish.split("[;]")[0].split("[.]")[2].split(" ")[1];
 
             }
             String publishmonth = "";
@@ -582,11 +586,11 @@ return true;
                 publishmonth = publish.split("[;]")[0].split("[.]")[1].split(" ")[2];
 
             }
-            String bookcode="";
-            if (!(publish.split("[;]").length<2)){
+            String bookcode = "";
+            if (!(publish.split("[;]").length < 2)) {
                 bookcode = publish.split("[;]")[1].split("[.]")[0];
             }
-            String doi=element.select("dl[class=rprtid]").select("dd").select("a") .text();
+            String doi = element.select("dl[class=rprtid]").select("dd").select("a").text();
 //            if (!(publish.split("doi[:] ").length<2))
 //                doi = publish.split("doi[:] ")[1];
             alls = getauthor(element);
@@ -603,11 +607,11 @@ return true;
 //                    "\n摘要：" + abstr + "\n关键字：" + keywords);
 
 //            查重
-          GeneinfoEntity entity=mapper.geneidlist(Integer.parseInt(prenum));
-            if (entity!=null){
-                log.info(entity.getPreTitle()+"已经有了------------------------");
-                log.info(au_id + "哈哈" + com_id+"gene_id" );
-                File file2 = new File("/media/wangshichen/文件/webs/"+filename);
+            GeneinfoEntity entity = mapper.geneidlist(Integer.parseInt(prenum));
+            if (entity != null) {
+                log.info(entity.getPreTitle() + "已经有了------------------------");
+                log.info(au_id + "哈哈" + com_id + "gene_id");
+                File file2 = new File("/media/wangshichen/文件/webs/" + filename);
                 if (file2.exists()) {
                     log.info("删除文件");
                     file2.delete();
@@ -617,13 +621,11 @@ return true;
             for (Tmp_aut tmp_aut : alls) {
                 InfoAuthorEntity authorEntity = new InfoAuthorEntity();
 //                InfoAuthorEntity aut=mapper. findautbyname( tmp_aut.getAuthor());
-                int au_id_tm=au_idadd();
+                int au_id_tm = au_idadd();
                 authorEntity.setId(au_id_tm);
                 authorEntity.setName(tmp_aut.getAuthor());
-                log.info(authorEntity.getId()+"---------------+"+au_id_tm+"+++++++++++++++++++++++"+authorEntity.getName());
+                log.info(authorEntity.getId() + "---------------+" + au_id_tm + "+++++++++++++++++++++++" + authorEntity.getName());
                 tauthorEntityList.add(authorEntity);
-
-
 
 
                 if (tmp_aut.getCompanys() == null) {
@@ -632,15 +634,15 @@ return true;
                     companyEntity.setCompany(null);
                     companyEntity.setId(null);
                     mappingEntity.setCompanyId(0);
-                    mappingEntity.setAuthorId(au_id_tm);
+                    mappingEntity.setAuthor(tmp_aut.getAuthor());
                     mappingEntity.setProNum(Integer.valueOf(prenum));
                     tmappingEntityList.add(mappingEntity);
                 } else {
                     for (String rel_company : tmp_aut.getCompanys()) {
-                        int com_id_tm=com_idadd();
+                        int com_id_tm = com_idadd();
                         InfoCompanyEntity companyEntity = new InfoCompanyEntity();
                         InfoMappingEntity mappingEntity = new InfoMappingEntity();
-                        mappingEntity.setAuthorId(au_id_tm);
+                        mappingEntity.setAuthor(tmp_aut.getAuthor());
 
                         mappingEntity.setProNum(Integer.valueOf(prenum));
                         mappingEntity.setCompanyId(com_id_tm);
@@ -660,7 +662,7 @@ return true;
                 infoEntity.setPublishYear(Integer.valueOf(publishtime));
                 infoEntity.setPublishMonth(getdata(publishmonth));
 
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 infoEntity.setPublishYear(getdata(publishmonth));
 
             }
@@ -680,20 +682,26 @@ return true;
 
         log.info(tauthorEntityList.size());
 
-        File file = new File("/media/wangshichen/文件/webs/"+filename);
+        File file = new File("/media/wangshichen/文件/webs/" + filename);
         if (file.exists()) {
             log.info("删除文件");
             file.delete();
         }
 
 
-
         return true;
     }
+
     @Override
     public void savetomysql() {
 
     }
+
+    @Override
+    public int update_map(int id) {
+        return 0;
+    }
+
 
     @Override
     public GeneinfoEntity getone() {

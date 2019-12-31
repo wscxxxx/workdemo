@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      url: jdbc:mysql://39.96.194.226:3306/mailuo_sd?useSSL=false&charset='UTF8'&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://47.95.218.254:3306/mailuo_sd?useSSL=false&charset='UTF8'&allowPublicKeyRetrieval=true
       username: mailuo
       password: xb_PXR9jL_x=
       initial-size: 5

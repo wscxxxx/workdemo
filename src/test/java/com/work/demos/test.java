@@ -1,15 +1,12 @@
 package com.work.demos;
 
-import com.bailian.servicetk.core.data.BaseRepository;
-import com.bailian.servicetk.core.data.IMapper;
 import com.work.demos.mybatis.generef.util.FileReader;
 import com.work.demos.mybatis.generef.util.Tmp_aut;
 import com.work.demos.mybatis.spider.entity.GeneinfoEntity;
 import com.work.demos.mybatis.spider.entity.InfoAuthorEntity;
 import com.work.demos.mybatis.spider.entity.InfoCompanyEntity;
 import com.work.demos.mybatis.spider.entity.InfoMappingEntity;
-import com.work.demos.mybatis.spider.mapper.extension.GeneInfoNewExtensionMapper;
-import com.work.demos.mybatis.spider.repository.ISpiderRepository;
+import com.work.demos.utils.JSUtil;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.jsoup.Jsoup;
@@ -17,7 +14,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -160,7 +156,7 @@ public class test {
                     companyEntity.setCompany(null);
                     companyEntity.setId(null);
                     mappingEntity.setCompanyId(0);
-                    mappingEntity.setAuthorId(au_id_tm);
+                    mappingEntity.setAuthor(tmp_aut.getAuthor());
                     mappingEntity.setProNum(Integer.valueOf(prenum));
                     tmappingEntityList.add(mappingEntity);
 
@@ -170,7 +166,7 @@ public class test {
                         int com_id_tm = getCom_id();
                         InfoCompanyEntity companyEntity = new InfoCompanyEntity();
                         InfoMappingEntity mappingEntity = new InfoMappingEntity();
-                        mappingEntity.setAuthorId(au_id_tm);
+                        mappingEntity.setAuthor(tmp_aut.getAuthor());
 
                         mappingEntity.setProNum(Integer.valueOf(prenum));
                         mappingEntity.setCompanyId(com_id_tm);
@@ -325,7 +321,19 @@ public class test {
         String publishtime = publis.split("[;]")[0].split("[.]")[1].split(" ")[1];
         System.out.println(publishtime);
     }
+    @Test
+    public void test03(){
+        String xx="检测结果仅对本次送检样本负责，如有疑问，请于报告出具后三个工作日内咨询。<br>咨询电话：022-87190699。";
+        System.out.println(xx.replaceAll("<br>","\n"));
+    }
 
+
+    @Test
+    public void test04(){
+        String cookie=new JSUtil().getcookie("mutation");
+       int a= new JSUtil().getpage("mutation",cookie);
+        System.out.println(a);
+    }
 }
 
 

@@ -19,5 +19,7 @@ public interface InfoAuthorEntityMapper extends IMapper<InfoAuthorEntity> {
 
     int updateByPrimaryKeyWithBLOBs(InfoAuthorEntity record);
 
+    int updateByPrimaryKey(InfoAuthorEntity record);
+
     List<InfoAuthorEntity> selectMult(List<Long> ids);
 }

@@ -1,17 +1,13 @@
 package com.work.demos.mybatis.spider.entity;
 
-import com.bailian.servicetk.core.data.BaseEntity;
 import com.bailian.servicetk.core.data.BaseEntityV2;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-
 import java.util.Date;
 
 /**
  * t_reference_mapping
  */
-@Data
 @TableName("t_reference_mapping")
 public class InfoMappingEntity extends BaseEntityV2 {
     /**
@@ -27,24 +23,32 @@ public class InfoMappingEntity extends BaseEntityV2 {
     private Integer proNum;
 
     /**
-     * 作者id
-     */
-    @TableField("`author_id`")
-    private Integer authorId;
-
-    /**
      * 机构id,0代表ncbi上没有该作者的所属信息
      */
     @TableField("`company_id`")
     private Integer companyId;
 
-    public InfoMappingEntity(Long id, Integer proNum, Integer authorId, Integer companyId, Date createTime, Date updateTime) {
+    /**
+     * 作者姓名
+     */
+    @TableField("`author`")
+    private String author;
+
+    public InfoMappingEntity(Long id, Integer proNum, Integer companyId, Date createTime, Date updateTime) {
         this.id = id;
         this.proNum = proNum;
-        this.authorId = authorId;
         this.companyId = companyId;
         this.createTime = createTime;
         this.updateTime = updateTime;
+    }
+
+    public InfoMappingEntity(Long id, Integer proNum, Integer companyId, Date createTime, Date updateTime, String author) {
+        this.id = id;
+        this.proNum = proNum;
+        this.companyId = companyId;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.author = author;
     }
 
     public InfoMappingEntity() {
@@ -84,22 +88,6 @@ public class InfoMappingEntity extends BaseEntityV2 {
     }
 
     /**
-     * 作者id
-     * @return author_id 作者id
-     */
-    public Integer getAuthorId() {
-        return authorId;
-    }
-
-    /**
-     * 作者id
-     * @param authorId 作者id
-     */
-    public void setAuthorId(Integer authorId) {
-        this.authorId = authorId;
-    }
-
-    /**
      * 机构id,0代表ncbi上没有该作者的所属信息
      * @return company_id 机构id,0代表ncbi上没有该作者的所属信息
      */
@@ -113,5 +101,21 @@ public class InfoMappingEntity extends BaseEntityV2 {
      */
     public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
+    }
+
+    /**
+     * 作者姓名
+     * @return author 作者姓名
+     */
+    public String getAuthor() {
+        return author;
+    }
+
+    /**
+     * 作者姓名
+     * @param author 作者姓名
+     */
+    public void setAuthor(String author) {
+        this.author = author == null ? null : author.trim();
     }
 }

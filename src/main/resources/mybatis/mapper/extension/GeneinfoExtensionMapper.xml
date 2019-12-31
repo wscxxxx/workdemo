@@ -17,7 +17,7 @@
             <arg column="is_parse_keyword" javaType="java.lang.String" jdbcType="VARCHAR" />
         </constructor>
     </resultMap>
-    <resultMap id="AuthorMap" type="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
+    <resultMap id="AuthorMap2" type="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
         <constructor>
             <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
             <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -31,7 +31,7 @@
         select id from t_reference_author order by id DESC limit 1
      </select>
     <select id="getcompanylast" resultType="java.lang.Integer">
-        select id from t_reference_company order by id DESC limit 1
+        select id from t_reference_company_copy1 order by id DESC limit 1
      </select>
     <select id="getmappinglast" resultType="java.lang.Long">
         select id from t_reference_mapping order by id DESC limit 1
@@ -39,7 +39,7 @@
     <select id="geneidlist" parameterType="Integer" resultMap="BaseResultMap">
         select *  from t_reference where pre_num = #{pre_num,jdbcType=INTEGER}
      </select>
-    <select id="findautbyname" parameterType="java.lang.String" resultMap="AuthorMap">
+    <select id="findautbyname" parameterType="java.lang.String" resultMap="AuthorMap2">
         select *  from t_reference_author where name = #{name,jdbcType=VARCHAR} limit 1
      </select>
 
@@ -104,5 +104,16 @@
             #{emp.companyId,jdbcType=LONGVARCHAR})
         </foreach>
     </insert>
+
+
+    <select id="getbypage" parameterType="map" resultMap="AuthorMap2">
+      UPDATE t_reference_mapping pb
+INNER JOIN (SELECT id,name  FROM t_reference_author LIMIT  0 ,1000000)  author
+ON pb.author_id = author.id
+SET pb.author=author.`name`
+
+    </select>
+    
+
 </mapper>
 

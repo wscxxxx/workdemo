@@ -7,7 +7,8 @@ import com.work.demos.mybatis.spider.entity.WscEntity;
 public interface SpiderService {
      String getall();
      void getlast( );
-     void domain(int page);
+     void domain(int page,String gene);
      void savetosql(int page );
      void saveothers();
+     int update_mapping();
 }

@@ -3,38 +3,52 @@
 <mapper namespace="com.work.demos.mybatis.spider.mapper.InfoMappingEntityMapper">
   <resultMap id="BaseResultMap" type="com.work.demos.mybatis.spider.entity.InfoMappingEntity">
     <constructor>
-      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="pro_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="author_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="company_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
       <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
     </constructor>
   </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.work.demos.mybatis.spider.entity.InfoMappingEntity">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="pro_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="company_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="author" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
   <sql id="Base_Column_List">
-    id, pro_num, author_id, company_id, create_time, update_time
+    id, pro_num, company_id, create_time, update_time
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <sql id="Blob_Column_List">
+    author
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from t_reference_mapping
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_reference_mapping
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.work.demos.mybatis.spider.entity.InfoMappingEntity">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_reference_mapping (pro_num, author_id, company_id, 
-      create_time, update_time)
-    values (#{proNum,jdbcType=INTEGER}, #{authorId,jdbcType=INTEGER}, #{companyId,jdbcType=INTEGER}, 
-      current_timestamp(6), current_timestamp(6))
+    insert into t_reference_mapping (pro_num, company_id, create_time, 
+      update_time, author)
+    values (#{proNum,jdbcType=INTEGER}, #{companyId,jdbcType=INTEGER}, current_timestamp(6), 
+      current_timestamp(6), #{author,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.work.demos.mybatis.spider.entity.InfoMappingEntity">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_reference_mapping
@@ -42,27 +56,27 @@
       <if test="proNum != null">
         pro_num,
       </if>
-      <if test="authorId != null">
-        author_id,
-      </if>
       <if test="companyId != null">
         company_id,
       </if>
       create_time,
       update_time,
+      <if test="author != null">
+        author,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="proNum != null">
         #{proNum,jdbcType=INTEGER},
-      </if>
-      <if test="authorId != null">
-        #{authorId,jdbcType=INTEGER},
       </if>
       <if test="companyId != null">
         #{companyId,jdbcType=INTEGER},
       </if>
       current_timestamp(6),
       current_timestamp(6),
+      <if test="author != null">
+        #{author,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.work.demos.mybatis.spider.entity.InfoMappingEntity">
@@ -71,27 +85,36 @@
       <if test="proNum != null">
         pro_num = #{proNum,jdbcType=INTEGER},
       </if>
-      <if test="authorId != null">
-        author_id = #{authorId,jdbcType=INTEGER},
-      </if>
       <if test="companyId != null">
         company_id = #{companyId,jdbcType=INTEGER},
       </if>
       update_time = current_timestamp(6),
+      <if test="author != null">
+        author = #{author,jdbcType=LONGVARCHAR},
+      </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.work.demos.mybatis.spider.entity.InfoMappingEntity">
+    update t_reference_mapping
+    set pro_num = #{proNum,jdbcType=INTEGER},
+      company_id = #{companyId,jdbcType=INTEGER},
+      update_time = current_timestamp(6),
+      author = #{author,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.work.demos.mybatis.spider.entity.InfoMappingEntity">
     update t_reference_mapping
     set pro_num = #{proNum,jdbcType=INTEGER},
-      author_id = #{authorId,jdbcType=INTEGER},
       company_id = #{companyId,jdbcType=INTEGER},
       update_time = current_timestamp(6)
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectMult" parameterType="java.util.List" resultMap="BaseResultMap">
+  <select id="selectMult" parameterType="java.util.List" resultMap="ResultMapWithBLOBs">
     select
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from t_reference_mapping where 
     <choose>
       <when test="list!=null and list.size()>0">
