@@ -15,6 +15,8 @@ import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+
 
 @RestController
 @RequestMapping(value = "gene_ref")
@@ -28,8 +30,12 @@ public class SpiderWeb {
     @ApiOperation("保存至数据库")
      @RequestMapping(value = "/save", method = RequestMethod.GET)
     public Result domain(@RequestParam int page )  {
+        String basePath = "/media/wangshichen/文件/webs/";
+        String[] list = new File(basePath).list();
+        for (String path:list){
+            service.savetosql(page,basePath+path);
+        }
 
-        service.savetosql(page);
 
         return new Result(ResultConstant.SUCCESS_STATUE,"" );
     }
@@ -44,7 +50,11 @@ public class SpiderWeb {
     @ApiOperation("下载保存指定页数开始的网页")
     @RequestMapping(value = "/dowland", method = RequestMethod.GET)
     public void dowland(@RequestParam int page)  {
-        String gene="diagnosis";
+        String[] alls={"targeted therapy" };
+
+
+
+        String gene="chemotherapy";
         System.out.println(page);
        service.domain(page,gene);
 

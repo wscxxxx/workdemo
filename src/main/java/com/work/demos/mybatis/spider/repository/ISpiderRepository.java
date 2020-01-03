@@ -7,10 +7,10 @@ package com.work.demos.mybatis.spider.repository;
 
 @Component
 public interface ISpiderRepository  extends IBaseRepository  {
-    Mapptmp mutationdownland(int start,int end,Mapptmp flag ) ;
+    Mapptmp mutationdownland(int start,int end,Mapptmp flag,String path ) ;
     GeneinfoEntity getone();
     Mapptmp testmutationdownland( );
     Mapptmp addothers(  Mapptmp flag ) ;
     void savetomysql();
-    int update_map(int id);
+    int update_map( );
 }

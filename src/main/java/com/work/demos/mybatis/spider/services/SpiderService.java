@@ -8,7 +8,7 @@ public interface SpiderService {
      String getall();
      void getlast( );
      void domain(int page,String gene);
-     void savetosql(int page );
+     void savetosql(int page  ,String path);
      void saveothers();
      int update_mapping();
 }

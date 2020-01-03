@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Component
 public interface GeneInfoNewExtensionMapper extends GeneinfoEntityMapper {
-    Integer getgenelast();
+    GeneinfoEntity getgenelast(@Param("retable") Retable retable);
     Integer getauthorlast();
     Integer getcompanylast();
     Long getmappinglast();

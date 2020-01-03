@@ -9,6 +9,8 @@ import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+
 @Service
 public class SpiderServiceImpl implements SpiderService {
 
@@ -21,8 +23,8 @@ private Log log =LogFactory.getLog(SpiderServiceImpl.class);
 
     @Override
     public String getall() {
-
-         mapper.testmutationdownland();
+        mapper.update_map( );
+//         mapper.testmutationdownland();
         return "";
     }
 
@@ -38,11 +40,12 @@ private Log log =LogFactory.getLog(SpiderServiceImpl.class);
     }
 
     @Override
-    public void savetosql(int page   ) {
+    public void savetosql(int page ,String path  ) {
         int flag=1;
         Mapptmp res2=new Mapptmp();
+        String[] list2 = new File(path).list();
 
-        for (int i=page;i<3341;i++){
+        for (int i=page;i<list2.length;i++){
 
             int end=0;
 //            if (page+20>=2626){
@@ -60,12 +63,12 @@ private Log log =LogFactory.getLog(SpiderServiceImpl.class);
                 log.info("第"+page+"页到第"+(page+10)+"页");
                 log.info(res2 );
 
-                if (res2==null||res2.getAut_id()==0){
+                if (res2==null||res2.getCom_id()==0){
                     end=10;
-                    res2= mapper.mutationdownland(  page ,end,null );
+                    res2= mapper.mutationdownland(  page ,end,null,path );
 
                 }else {
-                    res2= mapper.mutationdownland(  page ,end,res2 );
+                    res2= mapper.mutationdownland(  page ,end,res2,path );
 
                 }
 
@@ -86,6 +89,6 @@ private Log log =LogFactory.getLog(SpiderServiceImpl.class);
 
     @Override
     public int update_mapping() {
-       return mapper.update_map(1);
+       return mapper.update_map( );
     }
 }
