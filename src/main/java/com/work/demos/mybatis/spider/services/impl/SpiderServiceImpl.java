@@ -21,8 +21,8 @@ private Log log =LogFactory.getLog(SpiderServiceImpl.class);
 
     @Override
     public String getall() {
-
-         mapper.testmutationdownland();
+        mapper.update_map( );
+//         mapper.testmutationdownland();
         return "";
     }
 
@@ -42,7 +42,7 @@ private Log log =LogFactory.getLog(SpiderServiceImpl.class);
         int flag=1;
         Mapptmp res2=new Mapptmp();
 
-        for (int i=page;i<3341;i++){
+        for (int i=page;i<48608;i++){
 
             int end=0;
 //            if (page+20>=2626){
@@ -60,7 +60,7 @@ private Log log =LogFactory.getLog(SpiderServiceImpl.class);
                 log.info("第"+page+"页到第"+(page+10)+"页");
                 log.info(res2 );
 
-                if (res2==null||res2.getAut_id()==0){
+                if (res2==null||res2.getCom_id()==0){
                     end=10;
                     res2= mapper.mutationdownland(  page ,end,null );
 
@@ -86,6 +86,6 @@ private Log log =LogFactory.getLog(SpiderServiceImpl.class);
 
     @Override
     public int update_mapping() {
-       return mapper.update_map(1);
+       return mapper.update_map( );
     }
 }

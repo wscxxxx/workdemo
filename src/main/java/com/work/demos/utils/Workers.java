@@ -18,19 +18,14 @@ import java.util.concurrent.*;
 
 public class Workers {
 
-    private  volatile  static        HttpHost proxy = new HttpHost("36.56.146.218", 4286);
+    private  volatile  static        HttpHost proxy = new HttpHost("58.218.92.69",6210);
 
     private   void save(String path, String result) {
         File file1 = new File(path);
-
-
+        String realpath=file1.getParent(); 
         if (!file1.exists()) {
-            try {
-                file1.createNewFile();
-            } catch (IOException e) {
-                // TODO 自动生成的 catch 块
-                e.printStackTrace();
-            }
+            File tempfile=new File(realpath);
+            tempfile.mkdirs();
         } else {
 //                mes.delete();
             System.out.println("已存在");
@@ -63,14 +58,14 @@ public class Workers {
         String cookie=new JSUtil().getcookie(gene);
 //        获取总页数
         int page=new JSUtil().getpage(gene,cookie);
-        ExecutorService threadPool = Executors.newFixedThreadPool(10);
+        ExecutorService threadPool = Executors.newFixedThreadPool(15);
         CompletionService<String> cs = new ExecutorCompletionService<String>(threadPool);
         for (int i = curpage; i < page; i++) {
             int index = i;
             String fileName = "第" + index + "页";
             String filePath = "/media/wangshichen/文件/webs/"+gene+"/";
             cs.submit(() -> {
-                System.out.println(fileName);
+                System.out.println(fileName+"共："+page+"页");
                 File file1 = new File(filePath + fileName);
                 if (file1.exists()){
                      return fileName+"已有，跳过";

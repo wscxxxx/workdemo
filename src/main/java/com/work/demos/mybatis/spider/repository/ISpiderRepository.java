@@ -12,5 +12,5 @@ public interface ISpiderRepository  extends IBaseRepository  {
     Mapptmp testmutationdownland( );
     Mapptmp addothers(  Mapptmp flag ) ;
     void savetomysql();
-    int update_map(int id);
+    int update_map( );
 }

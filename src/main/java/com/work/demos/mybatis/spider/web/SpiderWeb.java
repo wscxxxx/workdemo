@@ -43,8 +43,8 @@ public class SpiderWeb {
     }
     @ApiOperation("下载保存指定页数开始的网页")
     @RequestMapping(value = "/dowland", method = RequestMethod.GET)
-    public void dowland(@RequestParam int page)  {
-        String gene="diagnosis";
+    public void dowland(@RequestParam int page,String name)  {
+        String gene="targeted therapy";
         System.out.println(page);
        service.domain(page,gene);
 

@@ -48,13 +48,13 @@ public class test {
 
     @Test
     public void test01() {
-        String basePath = "/media/wangshichen/文件/webs/";
+        String basePath = "/media/wangshichen/文件/webs/diagnosis/";
         String[] list = new File(basePath).list();
 //        for (int i=2;i<list.length;i++){
 //            System.out.println(list[i]);
 //        }
-        for (int i = 3; i < list.length; i++) {
-            setdata("/media/wangshichen/文件/webs/" + list[i]);
+        for (int i = 0; i < list.length; i++) {
+            setdata("/media/wangshichen/文件/webs/diagnosis/" + list[i]);
         }
         System.out.println(lists.size());
 
@@ -91,30 +91,42 @@ public class test {
 
             String title = element.select("h1").text();
             String publish = element.select("div[class=cit]").text();
-            String publishcom = publish.split("[.]")[0];
-
             String publishtime ="";
+            String publishcom ="";
+            String publishmonth ="";
+            String bookcode = "";
+            String doi="";
+            if (!publish.equals("")) {
+                publish=element.select("p[class=aff_inline_book]").text();
+                System.out.println(publish);
+
+            }else {
+              publishcom = publish.split("[.]")[0];
+
+
             if (!publish.split("[;]")[0].split("[.]")[1].equals(")")){
                 publishtime=publish.split("[;]")[0].split("[.]")[1].split(" ")[1];
+
             }else {
                 publishtime=publish.split("[;]")[0].split("[.]")[2].split(" ")[1];
 
             }
 
-            String publishmonth = "";
+
             if (!(publish.split("[;]")[0].split("[.]")[1].split(" ").length < 3)) {
                 publishmonth = publish.split("[;]")[0].split("[.]")[1].split(" ")[2];
 
             }
             System.out.println("\n" + title);
-            String bookcode = "";
+
             if (!(publish.split("[;]").length < 2)) {
                 bookcode = publish.split("[;]")[1].split("[.]")[0];
             }
 
-            String doi = element.select("dl[class=rprtid]").select("dd").select("a").text();
+              doi = element.select("dl[class=rprtid]").select("dd").select("a").text();
 //            if (!(publish.split("doi[:] ").length<2))
 //                doi = publish.split("doi[:] ")[1];
+            }
             alls = getauthor(element);
             String author = element.select("div[class=auths]").text();
             String company = element.select("div[class=afflist]").select("dd").text();

@@ -152,7 +152,7 @@ public class Httpsend2 {
             sb.append("&");
 
         }
-        System.out.println(sb);
+//        System.out.println(sb);
         StringEntity reqEntity = new StringEntity(sb.toString());
 
         httpPost.setEntity(reqEntity);

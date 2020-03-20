@@ -11,16 +11,14 @@ class DemosApplicationTests {
     private Mapptmp add(Mapptmp res,int a){
         Mapptmp b=new Mapptmp();
          if (res==null){
-             b.setAut_id(12);
-             b.setCom_id(12);
+              b.setCom_id(12);
 
              System.out.println(b);
          }else {
              b=res;
              System.out.println("xxxx"+b);
 
-             b.setAut_id(res.getAut_id()+1);
-             b.setCom_id(res.getCom_id()+1);
+              b.setCom_id(res.getCom_id()+1);
 
          }
         return b;

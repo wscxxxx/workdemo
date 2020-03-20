@@ -15,6 +15,8 @@
             <arg column="publish_month" javaType="java.lang.Integer" jdbcType="INTEGER" />
             <arg column="key_words" javaType="java.lang.String" jdbcType="VARCHAR" />
             <arg column="is_parse_keyword" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <arg column="is_parse_es" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <arg column="pre_title" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
         </constructor>
     </resultMap>
     <resultMap id="AuthorMap2" type="com.work.demos.mybatis.spider.entity.InfoAuthorEntity">
@@ -24,20 +26,28 @@
         </constructor>
     </resultMap>
 
-    <select id="getgenelast" resultType="java.lang.Integer">
-        select id from t_reference order by id DESC limit 1
+     <select id="getgenelast" parameterType="com.work.demos.mybatis.spider.entity.Retable"  resultMap="BaseResultMap" statementType="STATEMENT">
+       	SELECT * FROM t_reference   where pre_num='31293054'
+	    UNION
+
+	    SELECT * FROM t_reference_copy1
+	    where pre_num='31293054'
+           limit 1
      </select>
     <select id="getauthorlast" resultType="java.lang.Integer">
         select id from t_reference_author order by id DESC limit 1
      </select>
     <select id="getcompanylast" resultType="java.lang.Integer">
-        select id from t_reference_company_copy1 order by id DESC limit 1
+        select id from t_reference_company order by id DESC limit 1
      </select>
     <select id="getmappinglast" resultType="java.lang.Long">
         select id from t_reference_mapping order by id DESC limit 1
      </select>
     <select id="geneidlist" parameterType="Integer" resultMap="BaseResultMap">
-        select *  from t_reference where pre_num = #{pre_num,jdbcType=INTEGER}
+        SELECT * FROM t_reference   where pre_num=#{pre_num,jdbcType=INTEGER}
+	    UNION
+	    SELECT * FROM t_reference_copy1  where pre_num=#{pre_num,jdbcType=INTEGER}
+           limit 1
      </select>
     <select id="findautbyname" parameterType="java.lang.String" resultMap="AuthorMap2">
         select *  from t_reference_author where name = #{name,jdbcType=VARCHAR} limit 1
@@ -55,7 +65,7 @@
 
 
     <insert id="geneadd" parameterType="java.util.List">
-        INSERT INTO t_reference(
+        INSERT INTO t_reference_copy1(
         id,pre_num,pre_title,
         abstract_en,doi,bookcode,publish_company,publish_year,
         publish_month,key_words
@@ -94,13 +104,13 @@
     </insert>
     <insert id="mappingadd" parameterType="java.util.List">
         INSERT INTO t_reference_mapping(
-        id,pro_num,author_id,
+        id,pro_num,author,
         company_id   )
         VALUES
         <foreach    collection="list" index="index" item="emp"   separator=",">
             (#{emp.id,jdbcType=INTEGER},
             #{emp.proNum,jdbcType=INTEGER},
-            #{emp.authorId,jdbcType=VARCHAR},
+            #{emp.author,jdbcType=VARCHAR},
             #{emp.companyId,jdbcType=LONGVARCHAR})
         </foreach>
     </insert>

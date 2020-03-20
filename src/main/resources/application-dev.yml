@@ -54,3 +54,4 @@ server:
   servlet:
     session:
       timeout: PT10m
+  port: 9090
